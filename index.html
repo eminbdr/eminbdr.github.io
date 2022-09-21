@@ -9,6 +9,8 @@
   border-collapse: collapse;
 }
 	</style>
+
+	<script>function myfunc(){document.getElementById("show-value").innerHTML = document.getElementById("points")["value"];console.log(document.getElementById("points")) }</script>
 </head>
 
 <body>
@@ -30,6 +32,10 @@
 		  <td>94</td>
 		</tr>
 	  </table>
+
+	  <button onclick="myfunc()">click me yes!</button>
+	  <input type="range" id="points" name="points" min="0" max="10">
+	  <p id="show-value">this is the value</p>
 </body>
 
 </html>
