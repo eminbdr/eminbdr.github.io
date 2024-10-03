@@ -1,0 +1,12 @@
+{
+    "en":{
+        "make": "make",
+        "model": "model",
+        "year": "year"
+    },
+    "tr":{
+        "make": "marka",
+        "model": "model",
+        "year": "yıl"
+    }
+}
