@@ -2,7 +2,7 @@ name: Generate RSS Feed
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Runs every 30 minutes
+    - cron: '0 */6 * * *'
   workflow_dispatch: 
     
 jobs:
@@ -35,8 +35,15 @@ jobs:
           mkdir -p /tmp/raw_feeds
           mkdir -p paradigmal-bulten
 
-          # Direct RSS Feeds (Empty array without spaces)
-          DIRECT_FEEDS=()
+          # ==========================================
+          # 1. DIRECT RSS FEEDS (cURL)
+          # Format: "URL"
+          # ==========================================
+          DIRECT_FEEDS=(
+            "https://www.elyazmalari.com/feed"
+            
+            
+          )
           
           i=0
           for url in "${DIRECT_FEEDS[@]}"; do
@@ -45,7 +52,10 @@ jobs:
             i=$((i+1))
           done
 
-          # Instagram Feeds (Atom Format)
+          # ==========================================
+          # 2. INSTAGRAM USERNAMES (Clustered)
+          # Format: "username"
+          # ==========================================
           INSTAGRAM_USERS=(
             "kampus.cadilari"
             "motorlukuryeiscileri"
@@ -55,18 +65,39 @@ jobs:
             "doganincocuklari"
             "elyazmalaricom"
             "heryercocuk"
+            
+            
           )
 
           j=0
           for user in "${INSTAGRAM_USERS[@]}"; do
             echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Atom > "/tmp/raw_feeds/insta_$j.xml" || true
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" || true
             j=$((j+1))
           done
 
-          # Merge All Feeds (No Date Restriction)
+          # ==========================================
+          # 3. OTHER RSS-BRIDGE FEEDS (PHP)
+          # Format: "bridge_parameters"
+          # ==========================================
+          OTHER_BRIDGE_FEEDS=(
+            # "action=display bridge=Twitter context=By+username u=someone format=Mrss"
+            
+            
+          )
+          
+          k=0
+          for params in "${OTHER_BRIDGE_FEEDS[@]}"; do
+            echo "Fetching Bridge Feed: $params"
+            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/other_bridge_$k.xml" || true
+            k=$((k+1))
+          done
+
+          # ==========================================
+          # 4. MERGE ALL FEEDS INTO paradigmal-bulten/feed.xml
+          # ==========================================
           php -r '
-            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title><lastBuildDate>" . date(DATE_RSS) . "</lastBuildDate></channel></rss>");
+            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title></channel></rss>");
             $targetDom = dom_import_simplexml($master->channel);
 
             foreach (glob("/tmp/raw_feeds/*.xml") as $file) {
@@ -80,6 +111,8 @@ jobs:
               if ($items) {
                 foreach ($items as $item) {
                   $domNode = dom_import_simplexml($item);
+                  
+                  // Inject feed title into item for source identification
                   $srcNode = $domNode->ownerDocument->createElement("sourceTitle", htmlspecialchars($channelTitle));
                   $domNode->appendChild($srcNode);
 
