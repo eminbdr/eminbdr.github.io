@@ -1,136 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
-  <title type="text"> - YouTube</title>
-  <link rel="alternate" type="text/html" href="https://www.youtube.com"/>
-  <link rel="self" type="application/atom+xml" href="http://"/>
-  <icon>https://www.youtube.com/favicon.ico</icon>
-  <logo>https://www.youtube.com/favicon.ico</logo>
-  <id>http://</id>
-  <updated>2026-09-14T16:44:38+00:00</updated>
-  <author>
-    <name>RSS-Bridge</name>
-  </author>
-  <entry>
-    <title type="html">Bridge returned error 400! (20710)</title>
-    <published>2026-09-14T16:44:38+00:00</published>
-    <updated>2026-09-14T16:44:38+00:00</updated>
-    <id>urn:sha1:1c73bfd72887303fe993be77c385f2053fcf555f</id>
-    <link rel="alternate" type="text/html" href="http://"/>
-    <content type="html">
-&lt;div class="error"&gt;
-
-            
-            
-    &lt;h2&gt;Details&lt;/h2&gt;
-
-    &lt;div style="margin-bottom: 15px"&gt;
-        &lt;div class="error-type"&gt;
-            &lt;strong&gt;Type:&lt;/strong&gt; ClientException        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;Code:&lt;/strong&gt; 400        &lt;/div&gt;
-
-        &lt;div class="error-message"&gt;
-            &lt;strong&gt;Message:&lt;/strong&gt; Invalid parameters value(s): username        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;File:&lt;/strong&gt; lib/utils.php        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;Line:&lt;/strong&gt; 256        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;h2&gt;Trace&lt;/h2&gt;
-
-            &lt;code&gt;
-            #0 index.php(73): RssBridge-&amp;gt;main()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #1 lib/RssBridge.php(39): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #2 lib/RssBridge.php(37): BasicAuthMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #3 middlewares/BasicAuthMiddleware.php(13): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #4 lib/RssBridge.php(37): CacheMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #5 middlewares/CacheMiddleware.php(44): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #6 lib/RssBridge.php(37): ExceptionMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #7 middlewares/ExceptionMiddleware.php(17): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #8 lib/RssBridge.php(37): SecurityMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #9 middlewares/SecurityMiddleware.php(19): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #10 lib/RssBridge.php(37): MaintenanceMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #11 middlewares/MaintenanceMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #12 lib/RssBridge.php(37): TokenAuthenticationMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #13 middlewares/TokenAuthenticationMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #14 lib/RssBridge.php(34): DisplayAction-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #15 actions/DisplayAction.php(54): DisplayAction-&amp;gt;createResponse()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #16 actions/DisplayAction.php(88): BridgeAbstract-&amp;gt;setInput()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #17 lib/BridgeAbstract.php(163): throwClientException()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #18 lib/utils.php(256)        &lt;/code&gt;
-        &lt;br&gt;
-    
-    &lt;br&gt;
-
-    &lt;h2&gt;Context&lt;/h2&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;Query:&lt;/strong&gt;     &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;Version:&lt;/strong&gt; 2025-08-05 (git.master.f07ffaa)    &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;OS:&lt;/strong&gt; Linux    &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;PHP:&lt;/strong&gt; 8.2.33    &lt;/div&gt;
-
-    &lt;br&gt;
-
-    &lt;a href="/"&gt;Go back&lt;/a&gt;
-&lt;/div&gt;
-
-
-&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues?q=is%3Aissue+is%3Aopen++-+YouTube" title="Opens GitHub to search for similar issues"&gt;
-    &lt;button&gt;Find similar bugs&lt;/button&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues/new?title=+-+YouTube+failed+with%3A+Invalid+parameters+value%28s%29%3A+username&amp;body=%60%60%60%0AClientException%3A+Invalid+parameters+value%28s%29%3A+username+in+lib%2Futils.php+line+256%0A%0Aindex.php%2873%29%3A+RssBridge-%3Emain%28%29%0Alib%2FRssBridge.php%2839%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+BasicAuthMiddleware-%3E__invoke%28%29%0Amiddlewares%2FBasicAuthMiddleware.php%2813%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+CacheMiddleware-%3E__invoke%28%29%0Amiddlewares%2FCacheMiddleware.php%2844%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+ExceptionMiddleware-%3E__invoke%28%29%0Amiddlewares%2FExceptionMiddleware.php%2817%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+SecurityMiddleware-%3E__invoke%28%29%0Amiddlewares%2FSecurityMiddleware.php%2819%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+MaintenanceMiddleware-%3E__invoke%28%29%0Amiddlewares%2FMaintenanceMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+TokenAuthenticationMiddleware-%3E__invoke%28%29%0Amiddlewares%2FTokenAuthenticationMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2834%29%3A+DisplayAction-%3E__invoke%28%29%0Aactions%2FDisplayAction.php%2854%29%3A+DisplayAction-%3EcreateResponse%28%29%0Aactions%2FDisplayAction.php%2888%29%3A+BridgeAbstract-%3EsetInput%28%29%0Alib%2FBridgeAbstract.php%28163%29%3A+throwClientException%28%29%0Alib%2Futils.php%28256%29%0A%0AQuery+string%3A+%0AVersion%3A+2025-08-05+%28git.master.f07ffaa%29%0AOs%3A+Linux%0APHP+version%3A+8.2.33%0A%60%60%60%0AMaintainer%3A+%40No+maintainer&amp;labels=Bridge-Broken&amp;assignee=N" title="After clicking this button you can review the issue before submitting it"&gt;
-    &lt;button&gt;Create GitHub Issue&lt;/button&gt;
-&lt;/a&gt;
-
-&lt;p class="maintainer"&gt;
-    No maintainer&lt;/p&gt;</content>
-  </entry>
-</feed>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+  <channel>
+    <title>evrenselgzt - Instagram</title>
+    <description>evrenselgzt - Instagram</description>
+    <link>https://www.instagram.com/evrenselgzt/</link>
+    <atom:link rel="alternate" type="text/html" href="https://www.instagram.com/evrenselgzt/"/>
+    <atom:link rel="self" type="application/atom+xml" href="http://"/>
+    <image>
+      <url>https://www.instagram.com/favicon.ico</url>
+      <title>evrenselgzt - Instagram</title>
+      <link>https://www.instagram.com/evrenselgzt/</link>
+    </image>
+    <item>
+      <title>▶ 📢Evrensel susmaz!...</title>
+      <link>https://www.instagram.com/p/DdReMhvgNMK/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdReMhvgNMK/</guid>
+      <pubDate>Mon, 14 Sep 2026 15:36:39 +0000</pubDate>
+      <description>&lt;video controls&gt;&lt;source src="" poster="https://www.instagram.com/p/DdReMhvgNMK/media?size=l" type="video/mp4"&gt;&lt;img src="https://www.instagram.com/p/DdReMhvgNMK/media?size=l" alt=""&gt;&lt;/video&gt;&lt;br&gt;&lt;br&gt;📢Evrensel susmaz!&lt;br /&gt;
+&lt;br /&gt;
+🚫X hesabımıza &amp;#039;milli g&amp;uuml;venlik&amp;#039; gerek&amp;ccedil;esiyle erişim engeli getirildi&lt;br /&gt;
+&lt;br /&gt;
+💬Evrensel Gazetesi Genel Yayın Y&amp;ouml;netmeni Hakkı &amp;Ouml;zdal:&lt;br /&gt;
+&lt;br /&gt;
+&amp;quot;Sans&amp;uuml;r&amp;uuml; aşmak konusunda ustalaşmış bir gelenekten geliyoruz. Bir kez daha bizim gibi gazetelerin okurlar tarafından desteklenmesinin &amp;ouml;nemi a&amp;ccedil;ığa &amp;ccedil;ıkıyor.&amp;quot;&lt;br /&gt;
+&lt;br /&gt;
+Yeni Hafta programının tamamı YouTube&amp;#039;da</description>
+      <media:content url="https://www.instagram.com/p/DdReMhvgNMK/media?size=l" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>▶ Smart Güneş Aliağa’da sendika değiştirdikleri için işten çıkarılan 7 işçinin direnişi sürüyor...</title>
+      <link>https://www.instagram.com/p/DdRdY-FjZa8/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdRdY-FjZa8/</guid>
+      <pubDate>Mon, 14 Sep 2026 15:30:08 +0000</pubDate>
+      <description>&lt;video controls&gt;&lt;source src="" poster="https://www.instagram.com/p/DdRdY-FjZa8/media?size=l" type="video/mp4"&gt;&lt;img src="https://www.instagram.com/p/DdRdY-FjZa8/media?size=l" alt=""&gt;&lt;/video&gt;&lt;br&gt;&lt;br&gt;Smart G&amp;uuml;neş Aliağa&amp;rsquo;da sendika değiştirdikleri i&amp;ccedil;in işten &amp;ccedil;ıkarılan 7 iş&amp;ccedil;inin direnişi s&amp;uuml;r&amp;uuml;yor&lt;br /&gt;
+&lt;br /&gt;
+Sendikalar, iş&amp;ccedil;ilerin işe iadesini istedi</description>
+      <media:content url="https://www.instagram.com/p/DdRdY-FjZa8/media?size=l" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Siyasi iktidarın 'Ailem Güvende' adı altında insan hakları ve LGBTİ örgütleri ile hak savunucularını hedef...</title>
+      <link>https://www.instagram.com/p/DdRLo86CKxG/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdRLo86CKxG/</guid>
+      <pubDate>Mon, 14 Sep 2026 12:53:57 +0000</pubDate>
+      <description>&lt;a href="https://www.instagram.com/p/DdRLo86CKxG/" target="_blank"&gt;&lt;img src="https://www.instagram.com/p/DdRLo86CKxG/media?size=l" alt="Siyasi iktidarın 'Ailem Güvende' adı altında insan hakları ve LGBTİ örgütleri ile hak savunucularını hedef..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;Siyasi iktidarın &amp;&lt;a href="https://www.instagram.com/explore/tags/039"&gt;#039&lt;/a&gt;;Ailem G&amp;uuml;vende&amp;&lt;a href="https://www.instagram.com/explore/tags/039"&gt;#039&lt;/a&gt;; adı altında insan hakları ve LGBTİ &amp;ouml;rg&amp;uuml;tleri ile hak savunucularını hedef alan operasyonlarıyla eş zamanlı y&amp;uuml;r&amp;uuml;tt&amp;uuml;ğ&amp;uuml; dijital sans&amp;uuml;r&amp;uuml;n son adreslerinden biri Evrensel oldu.&lt;br /&gt;
+&lt;br /&gt;
+AKP iktidarının yargı ve kolluk g&amp;uuml;c&amp;uuml;yle, d&amp;uuml;n &amp;quot;Ailem G&amp;uuml;vende&amp;quot; adı altında insan hakları ve LGBTİ &amp;ouml;rg&amp;uuml;tleri ile &amp;ccedil;ok sayıda hak savunucusuna y&amp;ouml;nelik d&amp;uuml;zenlediği operasyonlarla eş zamanlı y&amp;uuml;r&amp;uuml;tt&amp;uuml;ğ&amp;uuml; dijital sans&amp;uuml;r&amp;uuml;n son adreslerinden biri gazetemiz Evrensel&amp;&lt;a href="https://www.instagram.com/explore/tags/039"&gt;#039&lt;/a&gt;;in X (Twitter) hesabı oldu.&lt;br /&gt;
+&lt;br /&gt;
+Faşist darbenin yıl d&amp;ouml;n&amp;uuml;m&amp;uuml; olan 12 Eyl&amp;uuml;l&amp;&lt;a href="https://www.instagram.com/explore/tags/039"&gt;#039&lt;/a&gt;;de başlayan erişim engeli dalgasının ardından, aralarında &amp;uuml;niversitelerdeki LGBTİ topluluklarının da yer aldığı 32 X hesabı daha 13 Eyl&amp;uuml;l&amp;rsquo;de erişime engellenmişti.&lt;br /&gt;
+&lt;br /&gt;
+Bug&amp;uuml;n de gazetemiz Evrensel, Uluslararası Af &amp;Ouml;rg&amp;uuml;t&amp;uuml;, Barış Akademisyenleri ve Medya ve Hukuk &amp;Ccedil;alışmaları Derneğinin (MLSA) hesaplarının da bulunduğu &amp;ccedil;ok sayıda X ve Instagram hesabı, Bakırk&amp;ouml;y 4. Sulh Ceza Hakimliğinin 13 Eyl&amp;uuml;l 2026 tarihli ve 2026/9112 sayılı kararıyla erişime engellendi.&lt;br /&gt;
+&lt;br /&gt;
+Erişim engeli kararı hen&amp;uuml;z X tarafından uygulanmadı.</description>
+      <media:content url="https://www.instagram.com/p/DdRLo86CKxG/media?size=l" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>İşçi Sağlığı ve İş Güvenliği Meclisi (İSİG Meclisi) verilerine göre 2017'den 2026 Temmuz'a kadar en az 646...</title>
+      <link>https://www.instagram.com/p/DdRHNEGiENq/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdRHNEGiENq/</guid>
+      <pubDate>Mon, 14 Sep 2026 12:15:10 +0000</pubDate>
+      <description>&lt;a href="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809617385_1531358835692308_6625558718911298504_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk5ODc5NTYzNjI3MjQwMQ%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=joQ16Q0JeKcQ7kNvwF2su_X&amp;_nc_oc=Adp4jVwR72xNtXEzvYWHq9qMX0Q6Cc9Ae01FNMdrgBUhtbtnjv6OAvK12jLHrY4-fY0&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLmQxcvkobWBxVJ7YZvCNm8BPoowPuVG01fPJCfuQidiw&amp;oe=6AADE6D7" target="_blank"&gt;&lt;img src="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809617385_1531358835692308_6625558718911298504_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk5ODc5NTYzNjI3MjQwMQ%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=joQ16Q0JeKcQ7kNvwF2su_X&amp;_nc_oc=Adp4jVwR72xNtXEzvYWHq9qMX0Q6Cc9Ae01FNMdrgBUhtbtnjv6OAvK12jLHrY4-fY0&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLmQxcvkobWBxVJ7YZvCNm8BPoowPuVG01fPJCfuQidiw&amp;oe=6AADE6D7" alt="İşçi Sağlığı ve İş Güvenliği Meclisi (İSİG Meclisi) verilerine göre 2017'den 2026 Temmuz'a kadar en az 646..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809845375_1531358895692302_5772667443262707463_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=105&amp;ig_cache_key=Mzk4NTk5ODgwMTk2OTY2NTEwMg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=OkZcf-nN9skQ7kNvwE6r1NY&amp;_nc_oc=AdpfHmJ-M01q2aXsy7QnklXM2vZu5jr7eUVSURs7VGs-kL3rPITfVk0-caYpGXUkzYs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQK-OWqob1bDNAYL0mD1DvIso8ikGJY4AOnUDnSndjHeqw&amp;oe=6AADF2F8" target="_blank"&gt;&lt;img src="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809845375_1531358895692302_5772667443262707463_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=105&amp;ig_cache_key=Mzk4NTk5ODgwMTk2OTY2NTEwMg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=OkZcf-nN9skQ7kNvwE6r1NY&amp;_nc_oc=AdpfHmJ-M01q2aXsy7QnklXM2vZu5jr7eUVSURs7VGs-kL3rPITfVk0-caYpGXUkzYs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQK-OWqob1bDNAYL0mD1DvIso8ikGJY4AOnUDnSndjHeqw&amp;oe=6AADF2F8" alt="İşçi Sağlığı ve İş Güvenliği Meclisi (İSİG Meclisi) verilerine göre 2017'den 2026 Temmuz'a kadar en az 646..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;İş&amp;ccedil;i Sağlığı ve İş G&amp;uuml;venliği Meclisi (İSİG Meclisi) verilerine g&amp;ouml;re 2017&amp;#039;den 2026 Temmuz&amp;#039;a kadar en az 646 &amp;ccedil;ocuk &amp;ccedil;alışırken yaşamını yitirdi. Yıllık &amp;ouml;l&amp;uuml;m sayısı 2017-2022 arasında 60-67 bandında seyrederken 2023&amp;#039;te 54&amp;#039;e gerilemiş, ardından 2024&amp;#039;te 71&amp;#039;e, 2025&amp;#039;te ise 94&amp;#039;e y&amp;uuml;kselmişti. 2025&amp;#039;te &amp;ouml;len &amp;ccedil;ocukların 68&amp;#039;i 15-17 yaş grubunda, 81&amp;#039;i erkek; 31&amp;#039;i tarımda, 27&amp;#039;si sanayide, 20&amp;#039;si hizmetlerde, 16&amp;#039;sı inşaatta hayatını kaybetti. Bunlara ek olarak altı MESEM &amp;ouml;ğrencisi ile yedi meslek lisesi &amp;ouml;ğrencisi &amp;ccedil;alıştıkları veya staj yaptıkları işyerlerinde yaşamını yitirdi.&lt;br /&gt;
+&lt;br /&gt;
+Haberin tamamı evrensel.net&amp;#039;te</description>
+      <media:content url="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809617385_1531358835692308_6625558718911298504_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk5ODc5NTYzNjI3MjQwMQ%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=joQ16Q0JeKcQ7kNvwF2su_X&amp;_nc_oc=Adp4jVwR72xNtXEzvYWHq9qMX0Q6Cc9Ae01FNMdrgBUhtbtnjv6OAvK12jLHrY4-fY0&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLmQxcvkobWBxVJ7YZvCNm8BPoowPuVG01fPJCfuQidiw&amp;oe=6AADE6D7" type="image/jpeg"/>
+      <media:content url="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809845375_1531358895692302_5772667443262707463_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=105&amp;ig_cache_key=Mzk4NTk5ODgwMTk2OTY2NTEwMg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=OkZcf-nN9skQ7kNvwE6r1NY&amp;_nc_oc=AdpfHmJ-M01q2aXsy7QnklXM2vZu5jr7eUVSURs7VGs-kL3rPITfVk0-caYpGXUkzYs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQK-OWqob1bDNAYL0mD1DvIso8ikGJY4AOnUDnSndjHeqw&amp;oe=6AADF2F8" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>▶ İzBB’ye bağlı İZENERJİ’den çıkarılan 79 işçi, işe dönüş talebiyle belediye ve Genel-İş önünde...</title>
+      <link>https://www.instagram.com/p/DdRDp9IHPnS/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdRDp9IHPnS/</guid>
+      <pubDate>Mon, 14 Sep 2026 11:45:10 +0000</pubDate>
+      <description>&lt;video controls&gt;&lt;source src="" poster="https://www.instagram.com/p/DdRDp9IHPnS/media?size=l" type="video/mp4"&gt;&lt;img src="https://www.instagram.com/p/DdRDp9IHPnS/media?size=l" alt=""&gt;&lt;/video&gt;&lt;br&gt;&lt;br&gt;İzBB&amp;rsquo;ye bağlı İZENERJİ&amp;rsquo;den &amp;ccedil;ıkarılan 79 iş&amp;ccedil;i, işe d&amp;ouml;n&amp;uuml;ş talebiyle belediye ve Genel-İş &amp;ouml;n&amp;uuml;nde eylem yaptı&lt;br /&gt;
+&lt;br /&gt;
+İş&amp;ccedil;iler, işsiz kaldıkları s&amp;uuml;re&amp;ccedil;te kira ve faturalarını &amp;ouml;deyemediklerini, &amp;ccedil;ocuklarının eğitim masraflarını karşılayamadıklarını anlattı</description>
+      <media:content url="https://www.instagram.com/p/DdRDp9IHPnS/media?size=l" type="application/octet-stream"/>
+    </item>
+    <item>
+      <title>Türkiye’de hak örgütleri ve LGBTİ derneklerine yönelik "dışarıdan fonlanma" iddiaları üzerinden yürütülen...</title>
+      <link>https://www.instagram.com/p/DdQ-wTNDNPd/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdQ-wTNDNPd/</guid>
+      <pubDate>Mon, 14 Sep 2026 11:01:20 +0000</pubDate>
+      <description>&lt;a href="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809877236_1531318272363031_3949583630326302688_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=110&amp;ig_cache_key=Mzk4NTk2MTY1NDYyOTk3Mzc0Nw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=R7XC2flxobMQ7kNvwHOPh0s&amp;_nc_oc=AdqiTJzraScRX5TmXfAe6M4Jwecg9ZNPxJSHNgsCKrqargmCc3dCGb30t1CqYEclkQU&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJnyUOBv40MRHhqkowC3awe46meCzcJOzx0QzhyWoLEdQ&amp;oe=6AAE0A2F" target="_blank"&gt;&lt;img src="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809877236_1531318272363031_3949583630326302688_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=110&amp;ig_cache_key=Mzk4NTk2MTY1NDYyOTk3Mzc0Nw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=R7XC2flxobMQ7kNvwHOPh0s&amp;_nc_oc=AdqiTJzraScRX5TmXfAe6M4Jwecg9ZNPxJSHNgsCKrqargmCc3dCGb30t1CqYEclkQU&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJnyUOBv40MRHhqkowC3awe46meCzcJOzx0QzhyWoLEdQ&amp;oe=6AAE0A2F" alt="Türkiye’de hak örgütleri ve LGBTİ derneklerine yönelik "dışarıdan fonlanma" iddiaları üzerinden yürütülen..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809169338_1531318445696347_3175933556970246277_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk2MTY1MzgzMzA5NTc3Mg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=bwvJauSCQL8Q7kNvwGbm_oN&amp;_nc_oc=AdovWR4T6UmnK-qQ4hWVGFeVJUWoTRMTl0eGeBPg0yGUnl2JIYDY7H80_kue71Tn6d8&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLPaRAvY6W-j9WDQS_c8itf1Excuw4LR6KWW18D-OieYA&amp;oe=6AAE029C" target="_blank"&gt;&lt;img src="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809169338_1531318445696347_3175933556970246277_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk2MTY1MzgzMzA5NTc3Mg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=bwvJauSCQL8Q7kNvwGbm_oN&amp;_nc_oc=AdovWR4T6UmnK-qQ4hWVGFeVJUWoTRMTl0eGeBPg0yGUnl2JIYDY7H80_kue71Tn6d8&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLPaRAvY6W-j9WDQS_c8itf1Excuw4LR6KWW18D-OieYA&amp;oe=6AAE029C" alt="Türkiye’de hak örgütleri ve LGBTİ derneklerine yönelik "dışarıdan fonlanma" iddiaları üzerinden yürütülen..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/808730288_1531318522363006_5322750478009748428_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=101&amp;ig_cache_key=Mzk4NTk2MTY1NDc4MDk4MDU3Mw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=3PBQ5FEg7NgQ7kNvwEiGWWH&amp;_nc_oc=AdqMtEYXfZThBt2dyNXq1sAUQUnVd3CZuywd4VfXA0ecy9pNhmnxi9XMzRdIhLBEYzs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJ8byscxyJ4W9EGYZzRVVVU0H8zv5iAoo_c3o3SZQUSyA&amp;oe=6AADE6E8" target="_blank"&gt;&lt;img src="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/808730288_1531318522363006_5322750478009748428_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=101&amp;ig_cache_key=Mzk4NTk2MTY1NDc4MDk4MDU3Mw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=3PBQ5FEg7NgQ7kNvwEiGWWH&amp;_nc_oc=AdqMtEYXfZThBt2dyNXq1sAUQUnVd3CZuywd4VfXA0ecy9pNhmnxi9XMzRdIhLBEYzs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJ8byscxyJ4W9EGYZzRVVVU0H8zv5iAoo_c3o3SZQUSyA&amp;oe=6AADE6E8" alt="Türkiye’de hak örgütleri ve LGBTİ derneklerine yönelik "dışarıdan fonlanma" iddiaları üzerinden yürütülen..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/809002206_1531318655696326_9090089088578368113_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=108&amp;ig_cache_key=Mzk4NTk2MTY1NDQyMDI4NTU1NA%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=Dlwf8SmjJjIQ7kNvwEeAHsF&amp;_nc_oc=AdrT4qC_1r-WvGGbMtMp3yMlvJ34PwYHefVr0mwRGWRKfXo8NDqGSMacddgbhaVhf70&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQI5ZH-OpCFInC7e6YPQjSNDPXTcQQvYtbw8M8c4-nYhcA&amp;oe=6AADFB99" target="_blank"&gt;&lt;img src="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/809002206_1531318655696326_9090089088578368113_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=108&amp;ig_cache_key=Mzk4NTk2MTY1NDQyMDI4NTU1NA%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=Dlwf8SmjJjIQ7kNvwEeAHsF&amp;_nc_oc=AdrT4qC_1r-WvGGbMtMp3yMlvJ34PwYHefVr0mwRGWRKfXo8NDqGSMacddgbhaVhf70&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQI5ZH-OpCFInC7e6YPQjSNDPXTcQQvYtbw8M8c4-nYhcA&amp;oe=6AADFB99" alt="Türkiye’de hak örgütleri ve LGBTİ derneklerine yönelik "dışarıdan fonlanma" iddiaları üzerinden yürütülen..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;T&amp;uuml;rkiye&amp;rsquo;de hak &amp;ouml;rg&amp;uuml;tleri ve LGBTİ derneklerine y&amp;ouml;nelik &amp;quot;dışarıdan fonlanma&amp;quot; iddiaları &amp;uuml;zerinden y&amp;uuml;r&amp;uuml;t&amp;uuml;len operasyon g&amp;uuml;ndemdeki yerini korurken, Avrupa Birliği (AB) fonlarından en &amp;ccedil;ok yararlanan sivil toplum kuruluşlarının iktidara yakın vakıf ve dernekler olduğu ortaya &amp;ccedil;ıktı.&lt;br /&gt;
+&lt;br /&gt;
+İktisat&amp;ccedil;ı Nazır Kapusuz&amp;rsquo;un Erasmus+, ESC ve AB Komisyonu kayıtlarına dayanarak derlediği veriler, fon dağılımındaki &amp;ccedil;arpıcı tabloyu g&amp;ouml;zler &amp;ouml;n&amp;uuml;ne seriyor. AB fonlarında aslan payını kural olarak belediyeler ve &amp;uuml;niversiteler alsa da, dernek ve vakıf &amp;ouml;l&amp;ccedil;eğindeki dağılıma bakıldığında listenin zirvesine iktidarın desteklediği kurumlar yerleşti.&lt;br /&gt;
+&lt;br /&gt;
+Kapusuz&amp;#039;un derlediği 12 kurumluk listede zirveyi 1 milyon 724 bin 350 avro (Komisyon 2014+ ve Ulusal Ajans 2021-24 kalemlerinden) ile T&amp;Uuml;GVA &amp;ccedil;ekiyor. T&amp;Uuml;GVA&amp;#039;yı 1 milyon 193 bin 552 avro ile T&amp;Uuml;RGEV ve 826 bin 674 avro ile D&amp;uuml;nya Etnospor Konfederasyonu izledi.&lt;br /&gt;
+Bir kamu yayıncısı olan TRT&amp;#039;nin AB Komisyonu&amp;#039;ndan aldığı 448 bin avroluk fon da listede &amp;ouml;ne &amp;ccedil;ıkan bir diğer ayrıntı oldu. SETA&amp;#039;nın aldığı tutar ise IPA ve Erasmus kalemleriyle yaklaşık 417 bin 952 avroyu buluyor.&lt;br /&gt;
+&lt;br /&gt;
+Haberin tamamı evrensel.net&amp;#039;te</description>
+      <media:content url="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809877236_1531318272363031_3949583630326302688_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=110&amp;ig_cache_key=Mzk4NTk2MTY1NDYyOTk3Mzc0Nw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=R7XC2flxobMQ7kNvwHOPh0s&amp;_nc_oc=AdqiTJzraScRX5TmXfAe6M4Jwecg9ZNPxJSHNgsCKrqargmCc3dCGb30t1CqYEclkQU&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJnyUOBv40MRHhqkowC3awe46meCzcJOzx0QzhyWoLEdQ&amp;oe=6AAE0A2F" type="image/jpeg"/>
+      <media:content url="https://scontent-ord5-2.cdninstagram.com/v/t39.30808-6/809169338_1531318445696347_3175933556970246277_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=107&amp;ig_cache_key=Mzk4NTk2MTY1MzgzMzA5NTc3Mg%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=bwvJauSCQL8Q7kNvwGbm_oN&amp;_nc_oc=AdovWR4T6UmnK-qQ4hWVGFeVJUWoTRMTl0eGeBPg0yGUnl2JIYDY7H80_kue71Tn6d8&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-2.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQLPaRAvY6W-j9WDQS_c8itf1Excuw4LR6KWW18D-OieYA&amp;oe=6AAE029C" type="image/jpeg"/>
+      <media:content url="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/808730288_1531318522363006_5322750478009748428_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=101&amp;ig_cache_key=Mzk4NTk2MTY1NDc4MDk4MDU3Mw%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=3PBQ5FEg7NgQ7kNvwEiGWWH&amp;_nc_oc=AdqMtEYXfZThBt2dyNXq1sAUQUnVd3CZuywd4VfXA0ecy9pNhmnxi9XMzRdIhLBEYzs&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQJ8byscxyJ4W9EGYZzRVVVU0H8zv5iAoo_c3o3SZQUSyA&amp;oe=6AADE6E8" type="image/jpeg"/>
+      <media:content url="https://scontent-ord5-1.cdninstagram.com/v/t39.30808-6/809002206_1531318655696326_9090089088578368113_n.jpg?stp=dst-jpg_e35_p1080x1080_tt6&amp;_nc_cat=108&amp;ig_cache_key=Mzk4NTk2MTY1NDQyMDI4NTU1NA%3D%3D.3-ccb7-5&amp;ccb=7-5&amp;_nc_sid=58cdad&amp;efg=eyJ2ZW5jb2RlX3RhZyI6IkNBUk9VU0VMX0lURU0ueHBpZHMuMTYzOC5zZHIucmVndWxhcl9waG90by5DMyJ9&amp;_nc_ohc=Dlwf8SmjJjIQ7kNvwEeAHsF&amp;_nc_oc=AdrT4qC_1r-WvGGbMtMp3yMlvJ34PwYHefVr0mwRGWRKfXo8NDqGSMacddgbhaVhf70&amp;_nc_zt=23&amp;_nc_ht=scontent-ord5-1.cdninstagram.com&amp;_nc_gid=BbzcEKNf_weB-2mtNYoIoQ&amp;_nc_ss=70689&amp;oh=00_AQI5ZH-OpCFInC7e6YPQjSNDPXTcQQvYtbw8M8c4-nYhcA&amp;oe=6AADFB99" type="image/jpeg"/>
+    </item>
+  </channel>
+</rss>
