@@ -1,0 +1,35 @@
+name: Generate RSS Feed
+
+on:
+  schedule:
+    # Runs automatically every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: 
+    # Allows you to click a button in GitHub to run it instantly
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, simplexml, curl, intl
+
+      - name: Fetch and Run RSS-Bridge
+        run: |
+          # 1. Download RSS-Bridge to the runner
+          git clone https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
+          
+          # 2. RUN YOUR CUSTOM BRIDGE ARGUMENTS HERE:
+          php /tmp/rss-bridge/index.php action=display bridge=YouTube context=By+username username=github format=Atom > public_feed.xml
+          
+      - name: Commit Updated Feed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated feed update"
+          file_pattern: "*.xml"
