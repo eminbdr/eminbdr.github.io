@@ -28,50 +28,80 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, simplexml, curl, intl
+          extensions: mbstring, simplexml, curl, intl, dom
 
-      - name: Fetch and Run RSS-Bridge
+      - name: Fetch and Merge RSS Feeds
         run: |
+          mkdir -p /tmp/raw_feeds
+
           # ==========================================
           # 1. DIRECT RSS FEEDS (cURL)
-          # Format: "URL|output_filename.xml"
+          # Format: "URL"
           # ==========================================
           DIRECT_FEEDS=(
-            # "https://example.com/rss|example_feed.xml"
-            "https://www.elyazmalari.com/feed|elyazmalari_feed.xml"
+            "https://www.elyazmalari.com/feed"
             
             
           )
           
-          for feed in "${DIRECT_FEEDS[@]}"; do
-            URL="${feed%%|*}"
-            FILE="${feed##*|}"
-            echo "Fetching Direct Feed: $URL -> $FILE"
-            curl -sL "$URL" > "$FILE"
+          i=0
+          for url in "${DIRECT_FEEDS[@]}"; do
+            echo "Fetching Direct Feed: $url"
+            curl -sL "$url" > "/tmp/raw_feeds/direct_$i.xml" || true
+            i=$((i+1))
           done
 
           # ==========================================
           # 2. RSS-BRIDGE FEEDS (PHP)
-          # Format: "bridge_parameters|output_filename.xml"
+          # Format: "bridge_parameters"
           # ==========================================
           BRIDGE_FEEDS=(
-            "action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss|public_feed.xml"
-            # "action=display bridge=Twitter context=By+username u=someone format=Mrss|twitter_feed.xml"
-            "action=display bridge=Instagram context=Username u=kampus.cadilari media_type=all format=Mrss|public_feed.xml"
+            "action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=kampus.cadilari media_type=all format=Mrss"
             
             
           )
           
-          for feed in "${BRIDGE_FEEDS[@]}"; do
-            PARAMS="${feed%%|*}"
-            FILE="${feed##*|}"
-            echo "Fetching Bridge Feed: $PARAMS -> $FILE"
-            # $PARAMS is deliberately unquoted so Bash expands it into individual arguments for PHP
-            php /tmp/rss-bridge/index.php $PARAMS > "$FILE"
+          j=0
+          for params in "${BRIDGE_FEEDS[@]}"; do
+            echo "Fetching Bridge Feed: $params"
+            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/bridge_$j.xml" || true
+            j=$((j+1))
           done
+
+          # ==========================================
+          # 3. MERGE ALL FEEDS INTO SINGLE feed.xml
+          # ==========================================
+          php -r '
+            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title></channel></rss>");
+            $targetDom = dom_import_simplexml($master->channel);
+
+            foreach (glob("/tmp/raw_feeds/*.xml") as $file) {
+              libxml_use_internal_errors(true);
+              $xml = simplexml_load_file($file);
+              if (!$xml) continue;
+
+              $channelTitle = (string)($xml->channel->title ?? $xml->title ?? "News Source");
+              $items = $xml->xpath("//item | //entry");
+
+              if ($items) {
+                foreach ($items as $item) {
+                  $domNode = dom_import_simplexml($item);
+                  
+                  // Inject feed title into item for source identification
+                  $srcNode = $domNode->ownerDocument->createElement("sourceTitle", htmlspecialchars($channelTitle));
+                  $domNode->appendChild($srcNode);
+
+                  $imported = $targetDom->ownerDocument->importNode($domNode, true);
+                  $targetDom->appendChild($imported);
+                }
+              }
+            }
+            $master->asXML("feed.xml");
+          '
           
       - name: Commit Updated Feed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated feed update"
-          file_pattern: "*.xml"
+          file_pattern: "feed.xml"
