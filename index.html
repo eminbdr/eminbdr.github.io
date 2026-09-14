@@ -9,7 +9,7 @@
       font-family: system-ui, -apple-system, sans-serif;
       margin: 0;
       padding: 10px;
-      background-color: #f2f3f5; /* Light gray background matching the app */
+      background-color: #f2f3f5;
       color: #333;
     }
     
@@ -21,7 +21,6 @@
 
     #news-feed {
       display: grid;
-      /* Creates a 2-column layout on mobile, expanding to more on wider screens */
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 12px;
       padding: 5px;
@@ -39,10 +38,10 @@
       overflow: hidden;
       text-decoration: none;
       display: block;
-      background-color: #444;
+      background-color: #333;
       background-size: cover;
       background-position: center;
-      aspect-ratio: 16 / 10; /* Card aspect ratio */
+      aspect-ratio: 16 / 10;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
@@ -52,7 +51,6 @@
       left: 0;
       right: 0;
       padding: 40px 10px 10px 10px;
-      /* Dark gradient so white text is readable over the image */
       background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0) 100%);
       color: white;
       display: flex;
@@ -67,7 +65,6 @@
       font-size: 13px;
       font-weight: 700;
       line-height: 1.3;
-      /* Truncate text to 3 lines if it gets too long */
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
@@ -91,77 +88,61 @@
 <body>
 
   <h1>Latest News</h1>
-  <div id="news-feed">Loading updates from multiple sources...</div>
+  <div id="news-feed">Loading updates...</div>
 
   <script>
-    const feedUrls = ['public_feed.xml', 'duvar_feed.xml']; 
+    fetch('feed.xml')
+      .then(response => {
+        if (!response.ok) throw new Error('Combined feed not found');
+        return response.text();
+      })
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(xmlDoc => {
+        const items = Array.from(xmlDoc.querySelectorAll("item, entry"));
 
-    Promise.all(feedUrls.map(url => 
-      fetch(url)
-        .then(response => {
-          if (!response.ok) throw new Error(`Feed not found: ${url}`);
-          return response.text();
-        })
-        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-        .catch(error => {
-          console.error("Error fetching feed:", error);
-          return null; 
-        })
-    ))
-    .then(xmlDocs => {
-      let allItems = [];
-      let feedHtml = "";
-
-      xmlDocs.forEach(data => {
-        if (data) {
-          // Try to get the overall feed/channel title to use as the source name
-          const channelTitle = data.querySelector("channel > title, feed > title")?.textContent || "News Source";
-          
-          const items = Array.from(data.querySelectorAll("item, entry"));
-          
-          // Attach the source title to each item before combining
-          items.forEach(item => item.sourceTitle = channelTitle);
-          allItems = allItems.concat(items);
+        if (items.length === 0) {
+          document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>No articles found.</p>";
+          return;
         }
-      });
 
-      if (allItems.length === 0) {
-        feedHtml = "<p style='padding: 20px;'>No articles found. Waiting for GitHub Actions to generate the feeds...</p>";
-      } else {
-        allItems.forEach(el => {
+        // Sort articles chronologically (newest first)
+        items.sort((a, b) => {
+          const dateA = new Date(a.querySelector("pubDate, published, updated")?.textContent || 0);
+          const dateB = new Date(b.querySelector("pubDate, published, updated")?.textContent || 0);
+          return dateB - dateA;
+        });
+
+        let feedHtml = "";
+
+        items.forEach(el => {
           const title = el.querySelector("title")?.textContent || "No title";
           const linkNode = el.querySelector("link");
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
+          const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
           
-          // --- Attempt to extract an image URL ---
+          // Image Extraction
           let imageUrl = '';
-          // Check common media tags
           const media = el.querySelector("[url]"); 
           if (media && media.getAttribute('url').match(/\.(jpeg|jpg|gif|png)/i)) {
              imageUrl = media.getAttribute('url');
           } else {
-             // Fallback: check enclosure tag
              const enclosure = el.querySelector("enclosure[type^='image']");
              if (enclosure) {
                  imageUrl = enclosure.getAttribute('url');
              } else {
-                 // Fallback: try parsing the description for an HTML <img> tag
                  const description = el.querySelector("description, summary, content")?.textContent || "";
                  const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-                 if (imgMatch) {
-                     imageUrl = imgMatch[1];
-                 }
+                 if (imgMatch) imageUrl = imgMatch[1];
              }
           }
 
-          // --- Attempt to extract and format the date ---
+          // Date formatting
           let dateStr = "";
           const pubDateNode = el.querySelector("pubDate, published, updated");
           if (pubDateNode) {
               const d = new Date(pubDateNode.textContent);
               if (!isNaN(d.getTime())) {
                   const today = new Date();
-                  // If it's today, show HH:MM, otherwise show DD.MM.YYYY
                   if (d.toDateString() === today.toDateString()) {
                       dateStr = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                   } else {
@@ -170,23 +151,25 @@
               }
           }
 
-          // Build the card HTML
           feedHtml += `
             <a href="${link}" target="_blank" class="article-card" style="background-image: url('${imageUrl}');">
               <div class="article-overlay">
                 <div class="article-title">${title}</div>
                 <div class="article-meta">
-                  <span>${el.sourceTitle}</span>
+                  <span>${sourceName}</span>
                   <span>${dateStr}</span>
                 </div>
               </div>
             </a>
           `;
         });
-      }
 
-      document.getElementById("news-feed").innerHTML = feedHtml;
-    });
+        document.getElementById("news-feed").innerHTML = feedHtml;
+      })
+      .catch(error => {
+        console.error("Error loading feed:", error);
+        document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>Unable to load feeds.</p>";
+      });
   </script>
 
 </body>
