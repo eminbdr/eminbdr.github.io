@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bypasses Instagram CDN hotlink restrictions -->
+  <meta name="referrer" content="no-referrer">
   <title>My RSS Feed</title>
   <style>
     body {
@@ -12,29 +14,11 @@
       background-color: #f2f3f5;
       color: #333;
     }
-    
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    h1 { 
       padding: 10px;
-    }
-
-    h1 { margin: 0; font-size: 20px; }
-
-    .btn-refresh {
-      background: #0366d6;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-refresh:disabled {
-      background: #888;
-      cursor: not-allowed;
+      margin: 10px 0 0 0; 
+      font-size: 20px; 
     }
 
     #news-feed {
@@ -59,7 +43,6 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* Skeleton loader while image loads */
     .card-img {
       width: 100%;
       height: 100%;
@@ -110,24 +93,14 @@
 </head>
 <body>
 
-  <div class="header-bar">
-    <h1>Latest News</h1>
-    <button id="refresh-btn" class="btn-refresh" onclick="triggerWorkflow()">Trigger Refresh</button>
-  </div>
+  <h1>Latest News</h1>
   <div id="news-feed">Loading updates...</div>
 
   <script>
-    let lastBuildTime = null;
-
     fetch('feed.xml')
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(xmlDoc => {
-        // Parse feed build date for 30-min cooldown
-        const buildDateNode = xmlDoc.querySelector("lastBuildDate");
-        if (buildDateNode) lastBuildTime = new Date(buildDateNode.textContent).getTime();
-        checkCooldown();
-
         const threeDaysAgo = Date.now() - (3 * 24 * 60 * 60 * 1000);
         const items = Array.from(xmlDoc.querySelectorAll("item, entry")).filter(el => {
           const dateStr = el.querySelector("pubDate, published, updated")?.textContent;
@@ -154,19 +127,16 @@
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
           
+          // Image extraction logic for Atom & RSS content
           let imageUrl = '';
-          const media = el.querySelector("[url]"); 
-          if (media && media.getAttribute('url').match(/\.(jpeg|jpg|gif|png)/i)) {
-             imageUrl = media.getAttribute('url');
+          const contentText = el.querySelector("content, summary, description")?.textContent || "";
+          const imgMatch = contentText.match(/<img[^>]+src=["']([^"']+)["']/i);
+          
+          if (imgMatch) {
+            imageUrl = imgMatch[1];
           } else {
-             const enclosure = el.querySelector("enclosure[type^='image']");
-             if (enclosure) {
-                 imageUrl = enclosure.getAttribute('url');
-             } else {
-                 const description = el.querySelector("description, summary, content")?.textContent || "";
-                 const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-                 if (imgMatch) imageUrl = imgMatch[1];
-             }
+            const media = el.querySelector("[url]");
+            if (media) imageUrl = media.getAttribute('url');
           }
 
           let dateStr = "";
@@ -196,59 +166,11 @@
         });
 
         document.getElementById("news-feed").innerHTML = feedHtml;
+      })
+      .catch(err => {
+        console.error("Error loading feed:", err);
+        document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>Unable to load feeds.</p>";
       });
-
-    function checkCooldown() {
-      const btn = document.getElementById("refresh-btn");
-      const lastTrigger = parseInt(localStorage.getItem('last_manual_trigger') || '0', 10);
-      const effectiveLastTime = Math.max(lastBuildTime || 0, lastTrigger);
-      const elapsedMinutes = (Date.now() - effectiveLastTime) / (1000 * 60);
-
-      if (elapsedMinutes < 30) {
-        const remaining = Math.ceil(30 - elapsedMinutes);
-        btn.disabled = true;
-        btn.innerText = `Wait ${remaining}m`;
-      } else {
-        btn.disabled = false;
-        btn.innerText = "Trigger Refresh";
-      }
-    }
-
-    async function triggerWorkflow() {
-      const token = prompt("Enter GitHub Personal Access Token to trigger build:");
-      if (!token) return;
-
-      const btn = document.getElementById("refresh-btn");
-      btn.disabled = true;
-      btn.innerText = "Triggering...";
-
-      try {
-        const res = await fetch("https://api.github.com/repos/eminbdr/eminbdr.github.io/dispatches", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/vnd.github+json"
-          },
-          body: JSON.stringify({ event_type: "manual_trigger" })
-        });
-
-        if (res.ok) {
-          localStorage.setItem('last_manual_trigger', Date.now().toString());
-          alert("Workflow triggered! It will update in 1-2 minutes.");
-          checkCooldown();
-        } else {
-          alert("Failed to trigger workflow. Check token permissions.");
-          btn.disabled = false;
-          btn.innerText = "Trigger Refresh";
-        }
-      } catch (err) {
-        alert("Error triggering workflow.");
-        btn.disabled = false;
-        btn.innerText = "Trigger Refresh";
-      }
-    }
-
-    setInterval(checkCooldown, 30000);
   </script>
 </body>
 </html>
