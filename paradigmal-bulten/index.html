@@ -98,47 +98,56 @@
 
   <script>
     fetch('feed.xml')
-      .then(response => response.text())
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return response.text();
+      })
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(xmlDoc => {
-        const threeDaysAgo = Date.now() - (3 * 24 * 60 * 60 * 1000);
-        const items = Array.from(xmlDoc.querySelectorAll("item, entry")).filter(el => {
-          const dateStr = el.querySelector("pubDate, published, updated")?.textContent;
-          const t = dateStr ? new Date(dateStr).getTime() : Date.now();
-          return t >= threeDaysAgo;
-        });
+        const items = Array.from(xmlDoc.querySelectorAll("item, entry"));
 
         if (items.length === 0) {
-          document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>No recent articles in the last 3 days.</p>";
+          document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>No articles found in feed.xml.</p>";
           return;
         }
 
+        // Sort items by date descending safely
         items.sort((a, b) => {
-          const dateA = new Date(a.querySelector("pubDate, published, updated")?.textContent || 0);
-          const dateB = new Date(b.querySelector("pubDate, published, updated")?.textContent || 0);
-          return dateB - dateA;
+          const dateStrA = a.querySelector("pubDate, published, updated")?.textContent;
+          const dateStrB = b.querySelector("pubDate, published, updated")?.textContent;
+          const dateA = dateStrA ? new Date(dateStrA).getTime() : 0;
+          const dateB = dateStrB ? new Date(dateStrB).getTime() : 0;
+          return (isNaN(dateB) ? 0 : dateB) - (isNaN(dateA) ? 0 : dateA);
         });
 
         let feedHtml = "";
 
         items.forEach(el => {
           const title = el.querySelector("title")?.textContent || "No title";
+          
+          // Handle both RSS (<link>url</link>) and Atom (<link href="url"/>)
           const linkNode = el.querySelector("link");
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
+          
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
           
-          // Image extraction logic for Atom & RSS content
+          // Extract Image URL
           let imageUrl = '';
           const contentText = el.querySelector("content, summary, description")?.textContent || "";
+          
           const imgMatch = contentText.match(/<img[^>]+src=["']([^"']+)["']/i);
+          const posterMatch = contentText.match(/poster=["']([^"']+)["']/i);
           
           if (imgMatch) {
             imageUrl = imgMatch[1];
+          } else if (posterMatch) {
+            imageUrl = posterMatch[1];
           } else {
-            const media = el.querySelector("[url]");
-            if (media) imageUrl = media.getAttribute('url');
+            const media = el.querySelector("[url], enclosure[type^='image']");
+            if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
 
+          // Format Date
           let dateStr = "";
           const pubDateNode = el.querySelector("pubDate, published, updated");
           if (pubDateNode) {
@@ -153,7 +162,7 @@
 
           feedHtml += `
             <a href="${link}" target="_blank" class="article-card">
-              ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" loading="lazy" />` : ''}
+              ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
               <div class="article-overlay">
                 <div class="article-title">${title}</div>
                 <div class="article-meta">
@@ -169,7 +178,7 @@
       })
       .catch(err => {
         console.error("Error loading feed:", err);
-        document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>Unable to load feeds.</p>";
+        document.getElementById("news-feed").innerHTML = `<p style='padding: 20px;'>Unable to load feeds: ${err.message}</p>`;
       });
   </script>
 </body>
