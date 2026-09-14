@@ -64,11 +64,8 @@ jobs:
             j=$((j+1))
           done
 
-          # Merge Feeds & Keep Only Last 3 Days
+          # Merge All Feeds (No Date Restriction)
           php -r '
-            $now = time();
-            $threeDaysAgo = strtotime("-3 days");
-            
             $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title><lastBuildDate>" . date(DATE_RSS) . "</lastBuildDate></channel></rss>");
             $targetDom = dom_import_simplexml($master->channel);
 
@@ -82,13 +79,6 @@ jobs:
 
               if ($items) {
                 foreach ($items as $item) {
-                  $dateStr = (string)($item->pubDate ?? $item->published ?? $item->updated ?? "");
-                  $itemTime = $dateStr ? strtotime($dateStr) : $now;
-
-                  if ($itemTime && $itemTime < $threeDaysAgo) {
-                    continue; // Skip items older than 3 days
-                  }
-
                   $domNode = dom_import_simplexml($item);
                   $srcNode = $domNode->ownerDocument->createElement("sourceTitle", htmlspecialchars($channelTitle));
                   $domNode->appendChild($srcNode);
