@@ -1,1 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title type="text"> - YouTube</title>
+  <link rel="alternate" type="text/html" href="https://www.youtube.com"/>
+  <link rel="self" type="application/atom+xml" href="http://"/>
+  <icon>https://www.youtube.com/favicon.ico</icon>
+  <logo>https://www.youtube.com/favicon.ico</logo>
+  <id>http://</id>
+  <updated>2026-09-14T16:44:38+00:00</updated>
+  <author>
+    <name>RSS-Bridge</name>
+  </author>
+  <entry>
+    <title type="html">Bridge returned error 400! (20710)</title>
+    <published>2026-09-14T16:44:38+00:00</published>
+    <updated>2026-09-14T16:44:38+00:00</updated>
+    <id>urn:sha1:1c73bfd72887303fe993be77c385f2053fcf555f</id>
+    <link rel="alternate" type="text/html" href="http://"/>
+    <content type="html">
+&lt;div class="error"&gt;
 
+            
+            
+    &lt;h2&gt;Details&lt;/h2&gt;
+
+    &lt;div style="margin-bottom: 15px"&gt;
+        &lt;div class="error-type"&gt;
+            &lt;strong&gt;Type:&lt;/strong&gt; ClientException        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;strong&gt;Code:&lt;/strong&gt; 400        &lt;/div&gt;
+
+        &lt;div class="error-message"&gt;
+            &lt;strong&gt;Message:&lt;/strong&gt; Invalid parameters value(s): username        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;strong&gt;File:&lt;/strong&gt; lib/utils.php        &lt;/div&gt;
+
+        &lt;div&gt;
+            &lt;strong&gt;Line:&lt;/strong&gt; 256        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;h2&gt;Trace&lt;/h2&gt;
+
+            &lt;code&gt;
+            #0 index.php(73): RssBridge-&amp;gt;main()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #1 lib/RssBridge.php(39): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #2 lib/RssBridge.php(37): BasicAuthMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #3 middlewares/BasicAuthMiddleware.php(13): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #4 lib/RssBridge.php(37): CacheMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #5 middlewares/CacheMiddleware.php(44): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #6 lib/RssBridge.php(37): ExceptionMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #7 middlewares/ExceptionMiddleware.php(17): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #8 lib/RssBridge.php(37): SecurityMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #9 middlewares/SecurityMiddleware.php(19): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #10 lib/RssBridge.php(37): MaintenanceMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #11 middlewares/MaintenanceMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #12 lib/RssBridge.php(37): TokenAuthenticationMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #13 middlewares/TokenAuthenticationMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #14 lib/RssBridge.php(34): DisplayAction-&amp;gt;__invoke()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #15 actions/DisplayAction.php(54): DisplayAction-&amp;gt;createResponse()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #16 actions/DisplayAction.php(88): BridgeAbstract-&amp;gt;setInput()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #17 lib/BridgeAbstract.php(163): throwClientException()        &lt;/code&gt;
+        &lt;br&gt;
+            &lt;code&gt;
+            #18 lib/utils.php(256)        &lt;/code&gt;
+        &lt;br&gt;
+    
+    &lt;br&gt;
+
+    &lt;h2&gt;Context&lt;/h2&gt;
+
+    &lt;div&gt;
+        &lt;strong&gt;Query:&lt;/strong&gt;     &lt;/div&gt;
+
+    &lt;div&gt;
+        &lt;strong&gt;Version:&lt;/strong&gt; 2025-08-05 (git.master.f07ffaa)    &lt;/div&gt;
+
+    &lt;div&gt;
+        &lt;strong&gt;OS:&lt;/strong&gt; Linux    &lt;/div&gt;
+
+    &lt;div&gt;
+        &lt;strong&gt;PHP:&lt;/strong&gt; 8.2.33    &lt;/div&gt;
+
+    &lt;br&gt;
+
+    &lt;a href="/"&gt;Go back&lt;/a&gt;
+&lt;/div&gt;
+
+
+&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues?q=is%3Aissue+is%3Aopen++-+YouTube" title="Opens GitHub to search for similar issues"&gt;
+    &lt;button&gt;Find similar bugs&lt;/button&gt;
+&lt;/a&gt;
+
+&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues/new?title=+-+YouTube+failed+with%3A+Invalid+parameters+value%28s%29%3A+username&amp;body=%60%60%60%0AClientException%3A+Invalid+parameters+value%28s%29%3A+username+in+lib%2Futils.php+line+256%0A%0Aindex.php%2873%29%3A+RssBridge-%3Emain%28%29%0Alib%2FRssBridge.php%2839%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+BasicAuthMiddleware-%3E__invoke%28%29%0Amiddlewares%2FBasicAuthMiddleware.php%2813%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+CacheMiddleware-%3E__invoke%28%29%0Amiddlewares%2FCacheMiddleware.php%2844%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+ExceptionMiddleware-%3E__invoke%28%29%0Amiddlewares%2FExceptionMiddleware.php%2817%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+SecurityMiddleware-%3E__invoke%28%29%0Amiddlewares%2FSecurityMiddleware.php%2819%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+MaintenanceMiddleware-%3E__invoke%28%29%0Amiddlewares%2FMaintenanceMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+TokenAuthenticationMiddleware-%3E__invoke%28%29%0Amiddlewares%2FTokenAuthenticationMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2834%29%3A+DisplayAction-%3E__invoke%28%29%0Aactions%2FDisplayAction.php%2854%29%3A+DisplayAction-%3EcreateResponse%28%29%0Aactions%2FDisplayAction.php%2888%29%3A+BridgeAbstract-%3EsetInput%28%29%0Alib%2FBridgeAbstract.php%28163%29%3A+throwClientException%28%29%0Alib%2Futils.php%28256%29%0A%0AQuery+string%3A+%0AVersion%3A+2025-08-05+%28git.master.f07ffaa%29%0AOs%3A+Linux%0APHP+version%3A+8.2.33%0A%60%60%60%0AMaintainer%3A+%40No+maintainer&amp;labels=Bridge-Broken&amp;assignee=N" title="After clicking this button you can review the issue before submitting it"&gt;
+    &lt;button&gt;Create GitHub Issue&lt;/button&gt;
+&lt;/a&gt;
+
+&lt;p class="maintainer"&gt;
+    No maintainer&lt;/p&gt;</content>
+  </entry>
+</feed>
