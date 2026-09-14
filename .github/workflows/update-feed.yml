@@ -35,9 +35,8 @@ jobs:
           mkdir -p /tmp/raw_feeds
           mkdir -p paradigmal-bulten
 
-          # Direct RSS Feeds
-          DIRECT_FEEDS= (
-          )
+          # Direct RSS Feeds (Empty array without spaces)
+          DIRECT_FEEDS=()
           
           i=0
           for url in "${DIRECT_FEEDS[@]}"; do
