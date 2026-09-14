@@ -13,10 +13,28 @@
       color: #333;
     }
     
-    h1 {
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 10px;
-      margin-top: 10px;
-      font-size: 20px;
+    }
+
+    h1 { margin: 0; font-size: 20px; }
+
+    .btn-refresh {
+      background: #0366d6;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-refresh:disabled {
+      background: #888;
+      cursor: not-allowed;
     }
 
     #news-feed {
@@ -27,9 +45,7 @@
     }
     
     @media (min-width: 600px) {
-       #news-feed {
-         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-       }
+       #news-feed { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
     }
 
     .article-card {
@@ -38,11 +54,22 @@
       overflow: hidden;
       text-decoration: none;
       display: block;
-      background-color: #333;
-      background-size: cover;
-      background-position: center;
+      background-color: #222;
       aspect-ratio: 16 / 10;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Skeleton loader while image loads */
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .card-img.loaded {
+      opacity: 1;
     }
 
     .article-overlay {
@@ -58,6 +85,7 @@
       justify-content: flex-end;
       height: 100%;
       box-sizing: border-box;
+      pointer-events: none;
     }
 
     .article-title {
@@ -71,41 +99,47 @@
       overflow: hidden;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     }
-    
-    @media (min-width: 600px) {
-        .article-title { font-size: 16px; }
-    }
 
     .article-meta {
       display: flex;
       justify-content: space-between;
       font-size: 11px;
       color: #e0e0e0;
-      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
-  <h1>Latest News</h1>
+  <div class="header-bar">
+    <h1>Latest News</h1>
+    <button id="refresh-btn" class="btn-refresh" onclick="triggerWorkflow()">Trigger Refresh</button>
+  </div>
   <div id="news-feed">Loading updates...</div>
 
   <script>
+    let lastBuildTime = null;
+
     fetch('feed.xml')
-      .then(response => {
-        if (!response.ok) throw new Error('Combined feed not found');
-        return response.text();
-      })
+      .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(xmlDoc => {
-        const items = Array.from(xmlDoc.querySelectorAll("item, entry"));
+        // Parse feed build date for 30-min cooldown
+        const buildDateNode = xmlDoc.querySelector("lastBuildDate");
+        if (buildDateNode) lastBuildTime = new Date(buildDateNode.textContent).getTime();
+        checkCooldown();
+
+        const threeDaysAgo = Date.now() - (3 * 24 * 60 * 60 * 1000);
+        const items = Array.from(xmlDoc.querySelectorAll("item, entry")).filter(el => {
+          const dateStr = el.querySelector("pubDate, published, updated")?.textContent;
+          const t = dateStr ? new Date(dateStr).getTime() : Date.now();
+          return t >= threeDaysAgo;
+        });
 
         if (items.length === 0) {
-          document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>No articles found.</p>";
+          document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>No recent articles in the last 3 days.</p>";
           return;
         }
 
-        // Sort articles chronologically (newest first)
         items.sort((a, b) => {
           const dateA = new Date(a.querySelector("pubDate, published, updated")?.textContent || 0);
           const dateB = new Date(b.querySelector("pubDate, published, updated")?.textContent || 0);
@@ -120,7 +154,6 @@
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
           
-          // Image Extraction
           let imageUrl = '';
           const media = el.querySelector("[url]"); 
           if (media && media.getAttribute('url').match(/\.(jpeg|jpg|gif|png)/i)) {
@@ -136,23 +169,21 @@
              }
           }
 
-          // Date formatting
           let dateStr = "";
           const pubDateNode = el.querySelector("pubDate, published, updated");
           if (pubDateNode) {
               const d = new Date(pubDateNode.textContent);
               if (!isNaN(d.getTime())) {
                   const today = new Date();
-                  if (d.toDateString() === today.toDateString()) {
-                      dateStr = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                  } else {
-                      dateStr = `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${d.getFullYear()}`;
-                  }
+                  dateStr = (d.toDateString() === today.toDateString())
+                    ? d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+                    : `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth()+1).padStart(2, '0')}.${d.getFullYear()}`;
               }
           }
 
           feedHtml += `
-            <a href="${link}" target="_blank" class="article-card" style="background-image: url('${imageUrl}');">
+            <a href="${link}" target="_blank" class="article-card">
+              ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" loading="lazy" />` : ''}
               <div class="article-overlay">
                 <div class="article-title">${title}</div>
                 <div class="article-meta">
@@ -165,12 +196,59 @@
         });
 
         document.getElementById("news-feed").innerHTML = feedHtml;
-      })
-      .catch(error => {
-        console.error("Error loading feed:", error);
-        document.getElementById("news-feed").innerHTML = "<p style='padding: 20px;'>Unable to load feeds.</p>";
       });
-  </script>
 
+    function checkCooldown() {
+      const btn = document.getElementById("refresh-btn");
+      const lastTrigger = parseInt(localStorage.getItem('last_manual_trigger') || '0', 10);
+      const effectiveLastTime = Math.max(lastBuildTime || 0, lastTrigger);
+      const elapsedMinutes = (Date.now() - effectiveLastTime) / (1000 * 60);
+
+      if (elapsedMinutes < 30) {
+        const remaining = Math.ceil(30 - elapsedMinutes);
+        btn.disabled = true;
+        btn.innerText = `Wait ${remaining}m`;
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Trigger Refresh";
+      }
+    }
+
+    async function triggerWorkflow() {
+      const token = prompt("Enter GitHub Personal Access Token to trigger build:");
+      if (!token) return;
+
+      const btn = document.getElementById("refresh-btn");
+      btn.disabled = true;
+      btn.innerText = "Triggering...";
+
+      try {
+        const res = await fetch("https://api.github.com/repos/eminbdr/eminbdr.github.io/dispatches", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/vnd.github+json"
+          },
+          body: JSON.stringify({ event_type: "manual_trigger" })
+        });
+
+        if (res.ok) {
+          localStorage.setItem('last_manual_trigger', Date.now().toString());
+          alert("Workflow triggered! It will update in 1-2 minutes.");
+          checkCooldown();
+        } else {
+          alert("Failed to trigger workflow. Check token permissions.");
+          btn.disabled = false;
+          btn.innerText = "Trigger Refresh";
+        }
+      } catch (err) {
+        alert("Error triggering workflow.");
+        btn.disabled = false;
+        btn.innerText = "Trigger Refresh";
+      }
+    }
+
+    setInterval(checkCooldown, 30000);
+  </script>
 </body>
 </html>
