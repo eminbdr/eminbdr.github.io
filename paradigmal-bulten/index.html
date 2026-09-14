@@ -15,12 +15,36 @@
       color: #333;
     }
 
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 5px;
+    }
+
     h1 { 
-      padding: 10px;
-      margin: 10px 0 0 0; 
+      margin: 0; 
       font-size: 20px; 
     }
 
+    .btn-toggle {
+      background-color: #0366d6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn-toggle:hover {
+      background-color: #024ea4;
+    }
+
+    /* Grid / Card View (Default) */
     #news-feed {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -89,14 +113,78 @@
       font-size: 11px;
       color: #e0e0e0;
     }
+
+    /* List View Styles */
+    #news-feed.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    #news-feed.list-view .article-card {
+      aspect-ratio: auto;
+      min-height: 80px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    #news-feed.list-view .card-img {
+      width: 110px;
+      height: 80px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    #news-feed.list-view .article-overlay {
+      position: relative;
+      padding: 10px 14px;
+      background: transparent;
+      color: #222;
+      height: auto;
+      width: 100%;
+    }
+
+    #news-feed.list-view .article-title {
+      color: #111;
+      text-shadow: none;
+      font-size: 14px;
+      margin-bottom: 6px;
+      -webkit-line-clamp: 2;
+    }
+
+    #news-feed.list-view .article-meta {
+      color: #666;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Latest News</h1>
+  <div class="header-bar">
+    <h1>Latest News</h1>
+    <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">List View</button>
+  </div>
+
   <div id="news-feed">Loading updates...</div>
 
   <script>
+    // Restore layout preference on load
+    if (localStorage.getItem("preferred_view") === "list") {
+      document.getElementById("news-feed").classList.add("list-view");
+      document.getElementById("view-toggle-btn").innerText = "Card View";
+    }
+
+    function toggleView() {
+      const feed = document.getElementById("news-feed");
+      const btn = document.getElementById("view-toggle-btn");
+      const isListView = feed.classList.toggle("list-view");
+
+      btn.innerText = isListView ? "Card View" : "List View";
+      localStorage.setItem("preferred_view", isListView ? "list" : "card");
+    }
+
     fetch('feed.xml')
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -111,7 +199,6 @@
           return;
         }
 
-        // Sort items by date descending safely
         items.sort((a, b) => {
           const dateStrA = a.querySelector("pubDate, published, updated")?.textContent;
           const dateStrB = b.querySelector("pubDate, published, updated")?.textContent;
@@ -124,14 +211,10 @@
 
         items.forEach(el => {
           const title = el.querySelector("title")?.textContent || "No title";
-          
-          // Handle both RSS (<link>url</link>) and Atom (<link href="url"/>)
           const linkNode = el.querySelector("link");
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
-          
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
           
-          // Extract Image URL
           let imageUrl = '';
           const contentText = el.querySelector("content, summary, description")?.textContent || "";
           
@@ -147,7 +230,6 @@
             if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
 
-          // Format Date
           let dateStr = "";
           const pubDateNode = el.querySelector("pubDate, published, updated");
           if (pubDateNode) {
