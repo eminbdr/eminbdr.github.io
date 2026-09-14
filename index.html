@@ -191,37 +191,3 @@
 
 </body>
 </html>
-          const items = Array.from(data.querySelectorAll("item, entry"));
-          allItems = allItems.concat(items);
-        }
-      });
-
-      if (allItems.length === 0) {
-        feedHtml = "<p>No articles found. Waiting for GitHub Actions to generate the feeds...</p>";
-      } else {
-        // Build the HTML for the combined articles
-        allItems.forEach(el => {
-          const title = el.querySelector("title")?.textContent || "No title";
-          
-          // Handle both RSS (<link>URL</link>) and Atom (<link href="URL"/>)
-          const linkNode = el.querySelector("link");
-          const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
-          
-          // Handle various description tags across RSS/Atom formats
-          const description = el.querySelector("description, summary, content")?.textContent || "";
-
-          feedHtml += `
-            <div class="article">
-              <h3><a href="${link}" target="_blank">${title}</a></h3>
-              <p>${description}</p>
-            </div>
-          `;
-        });
-      }
-
-      document.getElementById("news-feed").innerHTML = feedHtml;
-    });
-  </script>
-
-</body>
-</html>
