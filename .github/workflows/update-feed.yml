@@ -2,7 +2,6 @@ name: Generate RSS Feed
 
 on:
   schedule:
-    # Runs automatically every 6 hours
     - cron: '0 */6 * * *'
   workflow_dispatch: 
     
@@ -21,11 +20,14 @@ jobs:
 
       - name: Fetch and Run RSS-Bridge
         run: |
-          # 1. Download RSS-Bridge to the runner
+          # Download RSS-Bridge to the runner
           git clone https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
           
-          # 2. RUN YOUR CUSTOM BRIDGE ARGUMENTS HERE:
-          php /tmp/rss-bridge/index.php action=display bridge=YouTube context=By+username username=github format=Atom > public_feed.xml
+          # 1. Fetch the direct Gazete Duvar RSS feed (Bypasses RSS-Bridge completely)
+          curl -sL https://www.gazeteduvar.com.tr/export/rss > duvar_feed.xml
+          
+          # 2. Run Instagram Bridge (Replaces the broken YouTube command)
+          php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss > public_feed.xml
           
       - name: Commit Updated Feed
         uses: stefanzweifel/git-auto-commit-action@v5
