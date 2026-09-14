@@ -2,7 +2,7 @@ name: Generate RSS Feed
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Runs every 30 minutes
+    - cron: '*/30 * * * *'
   workflow_dispatch: 
     
 jobs:
@@ -41,6 +41,8 @@ jobs:
           # ==========================================
           DIRECT_FEEDS=(
             "https://www.elyazmalari.com/feed"
+            
+            
           )
           
           i=0
@@ -63,12 +65,14 @@ jobs:
             "doganincocuklari"
             "elyazmalaricom"
             "heryercocuk"
+            
+            
           )
 
           j=0
           for user in "${INSTAGRAM_USERS[@]}"; do
             echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Atom > "/tmp/raw_feeds/insta_$j.xml" || true
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" || true
             j=$((j+1))
           done
 
@@ -77,7 +81,9 @@ jobs:
           # Format: "bridge_parameters"
           # ==========================================
           OTHER_BRIDGE_FEEDS=(
-            # "action=display bridge=Twitter context=By+username u=someone format=Atom"
+            # "action=display bridge=Twitter context=By+username u=someone format=Mrss"
+            
+            
           )
           
           k=0
