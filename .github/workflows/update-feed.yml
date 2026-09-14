@@ -4,8 +4,6 @@ on:
   schedule:
     - cron: '*/30 * * * *' # Runs every 30 minutes
   workflow_dispatch: 
-  repository_dispatch:
-    types: [manual_trigger]
     
 jobs:
   update-feed:
@@ -37,11 +35,8 @@ jobs:
           mkdir -p /tmp/raw_feeds
           mkdir -p paradigmal-bulten
 
-          # ==========================================
-          # 1. DIRECT RSS FEEDS (cURL)
-          # ==========================================
-          DIRECT_FEEDS=(
-            "https://www.elyazmalari.com/feed"
+          # Direct RSS Feeds
+          DIRECT_FEEDS= (
           )
           
           i=0
@@ -51,9 +46,7 @@ jobs:
             i=$((i+1))
           done
 
-          # ==========================================
-          # 2. INSTAGRAM USERNAMES (Clustered)
-          # ==========================================
+          # Instagram Feeds (Atom Format)
           INSTAGRAM_USERS=(
             "kampus.cadilari"
             "motorlukuryeiscileri"
@@ -68,13 +61,11 @@ jobs:
           j=0
           for user in "${INSTAGRAM_USERS[@]}"; do
             echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" || true
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Atom > "/tmp/raw_feeds/insta_$j.xml" || true
             j=$((j+1))
           done
 
-          # ==========================================
-          # 3. MERGE FEEDS & FILTER LAST 3 DAYS
-          # ==========================================
+          # Merge Feeds & Keep Only Last 3 Days
           php -r '
             $now = time();
             $threeDaysAgo = strtotime("-3 days");
@@ -92,12 +83,11 @@ jobs:
 
               if ($items) {
                 foreach ($items as $item) {
-                  // Extract date and filter out older than 3 days
                   $dateStr = (string)($item->pubDate ?? $item->published ?? $item->updated ?? "");
                   $itemTime = $dateStr ? strtotime($dateStr) : $now;
 
                   if ($itemTime && $itemTime < $threeDaysAgo) {
-                    continue; // Skip articles older than 3 days
+                    continue; // Skip items older than 3 days
                   }
 
                   $domNode = dom_import_simplexml($item);
@@ -117,4 +107,3 @@ jobs:
         with:
           commit_message: "Automated feed update"
           file_pattern: "paradigmal-bulten/feed.xml"
-
