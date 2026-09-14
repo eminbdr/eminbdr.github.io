@@ -2,8 +2,10 @@ name: Generate RSS Feed
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '*/30 * * * *' # Runs every 30 minutes
   workflow_dispatch: 
+  repository_dispatch:
+    types: [manual_trigger]
     
 jobs:
   update-feed:
@@ -37,12 +39,9 @@ jobs:
 
           # ==========================================
           # 1. DIRECT RSS FEEDS (cURL)
-          # Format: "URL"
           # ==========================================
           DIRECT_FEEDS=(
             "https://www.elyazmalari.com/feed"
-            
-            
           )
           
           i=0
@@ -54,7 +53,6 @@ jobs:
 
           # ==========================================
           # 2. INSTAGRAM USERNAMES (Clustered)
-          # Format: "username"
           # ==========================================
           INSTAGRAM_USERS=(
             "kampus.cadilari"
@@ -65,8 +63,6 @@ jobs:
             "doganincocuklari"
             "elyazmalaricom"
             "heryercocuk"
-            
-            
           )
 
           j=0
@@ -77,27 +73,13 @@ jobs:
           done
 
           # ==========================================
-          # 3. OTHER RSS-BRIDGE FEEDS (PHP)
-          # Format: "bridge_parameters"
-          # ==========================================
-          OTHER_BRIDGE_FEEDS=(
-            # "action=display bridge=Twitter context=By+username u=someone format=Mrss"
-            
-            
-          )
-          
-          k=0
-          for params in "${OTHER_BRIDGE_FEEDS[@]}"; do
-            echo "Fetching Bridge Feed: $params"
-            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/other_bridge_$k.xml" || true
-            k=$((k+1))
-          done
-
-          # ==========================================
-          # 4. MERGE ALL FEEDS INTO paradigmal-bulten/feed.xml
+          # 3. MERGE FEEDS & FILTER LAST 3 DAYS
           # ==========================================
           php -r '
-            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title></channel></rss>");
+            $now = time();
+            $threeDaysAgo = strtotime("-3 days");
+            
+            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title><lastBuildDate>" . date(DATE_RSS) . "</lastBuildDate></channel></rss>");
             $targetDom = dom_import_simplexml($master->channel);
 
             foreach (glob("/tmp/raw_feeds/*.xml") as $file) {
@@ -110,9 +92,15 @@ jobs:
 
               if ($items) {
                 foreach ($items as $item) {
+                  // Extract date and filter out older than 3 days
+                  $dateStr = (string)($item->pubDate ?? $item->published ?? $item->updated ?? "");
+                  $itemTime = $dateStr ? strtotime($dateStr) : $now;
+
+                  if ($itemTime && $itemTime < $threeDaysAgo) {
+                    continue; // Skip articles older than 3 days
+                  }
+
                   $domNode = dom_import_simplexml($item);
-                  
-                  // Inject feed title into item for source identification
                   $srcNode = $domNode->ownerDocument->createElement("sourceTitle", htmlspecialchars($channelTitle));
                   $domNode->appendChild($srcNode);
 
@@ -129,3 +117,4 @@ jobs:
         with:
           commit_message: "Automated feed update"
           file_pattern: "paradigmal-bulten/feed.xml"
+
