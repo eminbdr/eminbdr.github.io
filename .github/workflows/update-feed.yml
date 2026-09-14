@@ -23,11 +23,43 @@ jobs:
           # Download RSS-Bridge to the runner
           git clone https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
           
-          # 1. Fetch the direct Gazete Duvar RSS feed (Bypasses RSS-Bridge completely)
-          curl -sL https://www.gazeteduvar.com.tr/export/rss > duvar_feed.xml
+          # ==========================================
+          # 1. DIRECT RSS FEEDS (cURL)
+          # Format: "URL|output_filename.xml"
+          # ==========================================
+          DIRECT_FEEDS=(
+            # "https://example.com/rss|example_feed.xml"
+            "https://www.elyazmalari.com/feed/"
+
+            
+            
+          )
           
-          # 2. Run Instagram Bridge (Replaces the broken YouTube command)
-          php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss > public_feed.xml
+          for feed in "${DIRECT_FEEDS[@]}"; do
+            URL="${feed%%|*}"
+            FILE="${feed##*|}"
+            echo "Fetching Direct Feed: $URL -> $FILE"
+            curl -sL "$URL" > "$FILE"
+          done
+
+          # ==========================================
+          # 2. RSS-BRIDGE FEEDS (PHP)
+          # Format: "bridge_parameters|output_filename.xml"
+          # ==========================================
+          BRIDGE_FEEDS=(
+            "action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss|public_feed.xml"
+            # "action=display bridge=Twitter context=By+username u=someone format=Mrss|twitter_feed.xml"
+            
+            
+          )
+          
+          for feed in "${BRIDGE_FEEDS[@]}"; do
+            PARAMS="${feed%%|*}"
+            FILE="${feed##*|}"
+            echo "Fetching Bridge Feed: $PARAMS -> $FILE"
+            # $PARAMS is deliberately unquoted so Bash expands it into individual arguments for PHP
+            php /tmp/rss-bridge/index.php $PARAMS > "$FILE"
+          done
           
       - name: Commit Updated Feed
         uses: stefanzweifel/git-auto-commit-action@v5
