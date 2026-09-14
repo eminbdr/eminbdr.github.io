@@ -56,8 +56,16 @@ jobs:
           # Format: "bridge_parameters"
           # ==========================================
           BRIDGE_FEEDS=(
-            "action=display bridge=Instagram context=Username u=evrenselgzt media_type=all format=Mrss"
             "action=display bridge=Instagram context=Username u=kampus.cadilari media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=motorlukuryeiscileri media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=toplumsal.ozgurluk.partisi media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=ozgurlukcugenclik media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=peri_hankoca media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=doganincocuklari media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=elyazmalaricom media_type=all format=Mrss"
+            "action=display bridge=Instagram context=Username u=heryercocuk media_type=all format=Mrss"
+            
+            
             
             
           )
