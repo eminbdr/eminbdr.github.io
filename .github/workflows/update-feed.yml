@@ -24,7 +24,6 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
 
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -33,17 +32,13 @@ jobs:
 
       - name: Fetch and Run RSS-Bridge
         run: |
-          # Download RSS-Bridge to the runner
-          git clone https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
-          
           # ==========================================
           # 1. DIRECT RSS FEEDS (cURL)
           # Format: "URL|output_filename.xml"
           # ==========================================
           DIRECT_FEEDS=(
             # "https://example.com/rss|example_feed.xml"
-            "https://www.elyazmalari.com/feed"
-
+            "https://www.elyazmalari.com/feed|elyazmalari_feed.xml"
             
             
           )
