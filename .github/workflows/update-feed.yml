@@ -33,6 +33,7 @@ jobs:
       - name: Fetch and Merge RSS Feeds
         run: |
           mkdir -p /tmp/raw_feeds
+          mkdir -p paradigmal-bulten
 
           # ==========================================
           # 1. DIRECT RSS FEEDS (cURL)
@@ -52,33 +53,48 @@ jobs:
           done
 
           # ==========================================
-          # 2. RSS-BRIDGE FEEDS (PHP)
-          # Format: "bridge_parameters"
+          # 2. INSTAGRAM USERNAMES (Clustered)
+          # Format: "username"
           # ==========================================
-          BRIDGE_FEEDS=(
-            "action=display bridge=Instagram context=Username u=kampus.cadilari media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=motorlukuryeiscileri media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=toplumsal.ozgurluk.partisi media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=ozgurlukcugenclik media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=peri_hankoca media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=doganincocuklari media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=elyazmalaricom media_type=all format=Mrss"
-            "action=display bridge=Instagram context=Username u=heryercocuk media_type=all format=Mrss"
-            
-            
+          INSTAGRAM_USERS=(
+            "kampus.cadilari"
+            "motorlukuryeiscileri"
+            "toplumsal.ozgurluk.partisi"
+            "ozgurlukcugenclik"
+            "peri_hankoca"
+            "doganincocuklari"
+            "elyazmalaricom"
+            "heryercocuk"
             
             
           )
-          
+
           j=0
-          for params in "${BRIDGE_FEEDS[@]}"; do
-            echo "Fetching Bridge Feed: $params"
-            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/bridge_$j.xml" || true
+          for user in "${INSTAGRAM_USERS[@]}"; do
+            echo "Fetching Instagram Feed: @$user"
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" || true
             j=$((j+1))
           done
 
           # ==========================================
-          # 3. MERGE ALL FEEDS INTO SINGLE feed.xml
+          # 3. OTHER RSS-BRIDGE FEEDS (PHP)
+          # Format: "bridge_parameters"
+          # ==========================================
+          OTHER_BRIDGE_FEEDS=(
+            # "action=display bridge=Twitter context=By+username u=someone format=Mrss"
+            
+            
+          )
+          
+          k=0
+          for params in "${OTHER_BRIDGE_FEEDS[@]}"; do
+            echo "Fetching Bridge Feed: $params"
+            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/other_bridge_$k.xml" || true
+            k=$((k+1))
+          done
+
+          # ==========================================
+          # 4. MERGE ALL FEEDS INTO paradigmal-bulten/feed.xml
           # ==========================================
           php -r '
             $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title></channel></rss>");
@@ -105,11 +121,11 @@ jobs:
                 }
               }
             }
-            $master->asXML("feed.xml");
+            $master->asXML("paradigmal-bulten/feed.xml");
           '
           
       - name: Commit Updated Feed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Automated feed update"
-          file_pattern: "feed.xml"
+          file_pattern: "paradigmal-bulten/feed.xml"
