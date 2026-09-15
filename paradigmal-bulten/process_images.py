@@ -1,5 +1,6 @@
 import re
 import os
+import html
 import urllib.request
 import hashlib
 
@@ -21,33 +22,39 @@ except FileNotFoundError:
     print(f"feed.xml not found at {feed_path}. Exiting.")
     exit(1)
 
-# Find all image URLs (specifically targeting Instagram/Facebook CDNs)
+# Find all raw image URLs in the XML content
 img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn)[^"\'<>\s]*)', content)
 
-for url in set(img_urls):
+for raw_url in set(img_urls):
     try:
-        # Create a unique filename based on the URL
-        filename = hashlib.md5(url.encode()).hexdigest() + '.jpg'
+        # 1. Decode HTML entities (&amp; -> &) to restore the real URL signature
+        clean_url = html.unescape(raw_url)
+        
+        # 2. Create a unique filename based on the cleaned URL
+        filename = hashlib.md5(clean_url.encode()).hexdigest() + '.jpg'
         filepath = os.path.join(images_folder, filename)
         
-        # Download the image if we haven't already
+        # 3. Download the image if it doesn't already exist locally
         if not os.path.exists(filepath):
             print(f"Downloading {filename}...")
-            # Use a standard User-Agent to avoid getting blocked during download
-            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+            req = urllib.request.Request(
+                clean_url, 
+                headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8'
+                }
+            )
             with urllib.request.urlopen(req) as response, open(filepath, 'wb') as out_file:
                 out_file.write(response.read())
         
-        # Replace the remote URL in the XML with the relative local path
-        # Note: We keep 'images/{filename}' here because index.html and feed.xml 
-        # are right next to the images folder, so standard relative links work perfectly.
-        content = content.replace(url, f'images/{filename}')
+        # 4. Replace the original raw XML link with the local image path
+        content = content.replace(raw_url, f'images/{filename}')
         
     except Exception as e:
-        print(f"Failed to download {url}: {e}")
+        print(f"Failed to download image: {e}")
 
 # Save the updated feed.xml
 with open(feed_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
-print("Finished processing images in the paradigmal-bulten folder.")
+print("Finished processing images.")
