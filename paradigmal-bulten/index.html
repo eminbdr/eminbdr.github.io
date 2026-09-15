@@ -66,6 +66,27 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
+    /* Floating Source Logo */
+    .source-logo-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      border: 2px solid white;
+      z-index: 10;
+      background-color: #f2f3f5;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .source-logo-badge.loaded {
+      opacity: 1;
+    }
+
     .card-img {
       width: 120px;
       height: 100%;
@@ -82,7 +103,8 @@
 
     .article-overlay {
       position: relative;
-      padding: 10px 14px;
+      /* Added extra right padding (45px) so text doesn't overlap the logo in list view */
+      padding: 10px 45px 10px 14px; 
       background: transparent;
       color: #222;
       height: auto;
@@ -118,26 +140,8 @@
     .article-meta {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-size: 11px;
       color: #777;
-    }
-
-    .source-info {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 600;
-    }
-
-    .source-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      background-color: #e5e7eb;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     /* Card / Grid View Overrides */
@@ -169,7 +173,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 50px 10px 10px 10px;
+      padding: 50px 10px 10px 10px; /* Restored default padding for card view bottom text */
       background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0) 100%);
       color: white;
       height: 100%;
@@ -194,10 +198,6 @@
 
     #news-feed.card-view .article-meta {
       color: #bbb;
-    }
-
-    #news-feed.card-view .source-icon {
-      border: 1px solid rgba(255, 255, 255, 0.4);
     }
   </style>
 </head>
@@ -226,29 +226,22 @@
       localStorage.setItem("preferred_view", isCardView ? "card" : "list");
     }
 
-    // Resolves source title to icon path from paradigmal-bulten/icons/
-    function getSourceLogo(sourceName) {
-      if (!sourceName) return '';
-
-      const slug = sourceName
-        .toLowerCase()
-        .trim()
-        .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
-        .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
-        .replace(/['’]/g, '')
-        .replace(/[^a-z0-9]/g, '');
-
-      const iconMap = {
-        "doganincocuklari": "paradigmal-bulten/icons/doganincocuklari.png",
-        "elyazmalari": "paradigmal-bulten/icons/elyazmaları.avif",
-        "heryercocuk": "paradigmal-bulten/icons/heryercocuk.jpeg",
-        "kampuscadilari": "paradigmal-bulten/icons/kampuscadilari.webp",
-        "motorlukuryeiscileri": "paradigmal-bulten/icons/motorlukuryeiscileri.jpeg",
-        "ozgurlukcugenclik": "paradigmal-bulten/icons/ozgurlukcugenclik.webp",
-        "toplumsalozgurlukpartisi": "paradigmal-bulten/icons/toplumsalozgurlukpartisi.png"
-      };
-
-      return iconMap[slug] || '';
+    // Maps source titles to icon file names in your icons folder
+    function getSourceIcon(sourceTitle) {
+      if (!sourceTitle) return null;
+      
+      const text = sourceTitle.toLowerCase();
+      const basePath = "icons/"; // Assumes the folder 'icons' is in the same directory as this HTML file
+      
+      if (text.includes("kampus") || text.includes("cadilari")) return basePath + "kampuscadilari.webp";
+      if (text.includes("dogan") || text.includes("doğan")) return basePath + "doganincocuklari.png";
+      if (text.includes("elyazma")) return basePath + "elyazmaları.avif";
+      if (text.includes("heryercocuk") || text.includes("çocuk")) return basePath + "heryercocuk.jpeg";
+      if (text.includes("kurye") || text.includes("motorlukurye")) return basePath + "motorlukuryeiscileri.jpeg";
+      if (text.includes("ozgurlukcu") || text.includes("özgürlükçü") || text.includes("genclik")) return basePath + "ozgurlukcugenclik.webp";
+      if (text.includes("toplumsal")) return basePath + "toplumsalozgurlukpartisi.png";
+      
+      return null; // No matching icon found
     }
 
     fetch('feed.xml')
@@ -280,7 +273,6 @@
           const linkNode = el.querySelector("link");
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
-          const logoUrl = getSourceLogo(sourceName);
           
           let imageUrl = '';
           const contentText = el.querySelector("content, summary, description")?.textContent || "";
@@ -298,7 +290,7 @@
             if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
 
-          // Clean HTML tags for plain-text snippet
+          // Clean HTML tags and decode HTML entities for plain-text snippet
           const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
           const snippetText = (parsedSnippetDoc.body.textContent || "").trim();
 
@@ -314,17 +306,19 @@
               }
           }
 
+          // Check if we have a corresponding icon for this source
+          const iconUrl = getSourceIcon(sourceName);
+
           feedHtml += `
             <a href="${link}" target="_blank" class="article-card">
+              ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${sourceName} Logo" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
               ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
+              
               <div class="article-overlay">
                 <div class="article-title">${title}</div>
                 ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ''}
                 <div class="article-meta">
-                  <span class="source-info">
-                    ${logoUrl ? `<img src="${logoUrl}" class="source-icon" alt="" onerror="this.style.display='none'" />` : ''}
-                    <span>${sourceName}</span>
-                  </span>
+                  <span>${sourceName}</span>
                   <span>${dateStr}</span>
                 </div>
               </div>
