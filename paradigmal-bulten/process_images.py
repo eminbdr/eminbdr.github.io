@@ -3,6 +3,8 @@ import os
 import html
 import urllib.request
 import hashlib
+import json
+from datetime import datetime
 
 # Get the exact directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -10,6 +12,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Define absolute paths based on the script's location
 images_folder = os.path.join(BASE_DIR, 'images')
 feed_path = os.path.join(BASE_DIR, 'feed.xml')
+metadata_path = os.path.join(BASE_DIR, 'feed_metadata.json')
 
 # Create the images directory inside paradigmal-bulten if it doesn't exist
 os.makedirs(images_folder, exist_ok=True)
@@ -66,4 +69,14 @@ for raw_url in set(img_urls):
 with open(feed_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
+# Write timestamp metadata for display in HTML
+timestamp_data = {
+    'last_updated': datetime.utcnow().isoformat() + 'Z',
+    'last_updated_readable': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+}
+
+with open(metadata_path, 'w', encoding='utf-8') as f:
+    json.dump(timestamp_data, f)
+
 print("Finished processing images.")
+print(f"Timestamp saved: {timestamp_data['last_updated_readable']}")
