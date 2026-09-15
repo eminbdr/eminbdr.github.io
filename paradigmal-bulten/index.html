@@ -103,7 +103,6 @@
 
     .article-overlay {
       position: relative;
-      /* Added extra right padding (45px) so text doesn't overlap the logo in list view */
       padding: 10px 45px 10px 14px; 
       background: transparent;
       color: #222;
@@ -173,7 +172,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 50px 10px 10px 10px; /* Restored default padding for card view bottom text */
+      padding: 50px 10px 10px 10px;
       background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0) 100%);
       color: white;
       height: 100%;
@@ -231,7 +230,7 @@
       if (!sourceTitle) return null;
       
       const text = sourceTitle.toLowerCase();
-      const basePath = "icons/"; // Assumes the folder 'icons' is in the same directory as this HTML file
+      const basePath = "icons/"; 
       
       if (text.includes("kampus") || text.includes("cadilari")) return basePath + "kampuscadilari.webp";
       if (text.includes("dogan") || text.includes("doğan")) return basePath + "doganincocuklari.png";
@@ -241,7 +240,7 @@
       if (text.includes("ozgurlukcu") || text.includes("özgürlükçü") || text.includes("genclik")) return basePath + "ozgurlukcugenclik.webp";
       if (text.includes("toplumsal")) return basePath + "toplumsalozgurlukpartisi.png";
       
-      return null; // No matching icon found
+      return null;
     }
 
     fetch('feed.xml')
@@ -277,7 +276,7 @@
           let imageUrl = '';
           const contentText = el.querySelector("content, summary, description")?.textContent || "";
           
-          // Image extraction logic
+          // Image extraction logic: checks feed.xml tags updated by Python script
           const imgMatch = contentText.match(/<img[^>]+src=["']([^"']+)["']/i);
           const posterMatch = contentText.match(/poster=["']([^"']+)["']/i);
           
@@ -289,13 +288,6 @@
             const media = el.querySelector("[url], enclosure[type^='image']");
             if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
-
-          // --- NEW: Proxy Instagram Images ---
-          // If the extracted image is from Instagram's CDN, route it through wsrv.nl
-          if (imageUrl && (imageUrl.includes('cdninstagram.com') || imageUrl.includes('fbcdn.net'))) {
-            imageUrl = 'https://wsrv.nl/?url=' + encodeURIComponent(imageUrl);
-          }
-          // -----------------------------------
 
           // Clean HTML tags and decode HTML entities for plain-text snippet
           const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
@@ -313,7 +305,6 @@
               }
           }
 
-          // Check if we have a corresponding icon for this source
           const iconUrl = getSourceIcon(sourceName);
 
           feedHtml += `
