@@ -129,3 +129,24 @@ jobs:
         with:
           commit_message: "Automated feed update"
           file_pattern: "paradigmal-bulten/feed.xml"
+
+      # ... (your previous steps that generate feed.xml via RSS-Bridge) ...
+
+      # --- NEW STEPS START HERE ---
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Download Images and Rewrite Feed
+        run: python process_images.py
+      # --- NEW STEPS END HERE ---
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed.xml images/
+          git commit -m "Update feed and download images" || echo "No changes to commit"
+          git push
+
