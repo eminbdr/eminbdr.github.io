@@ -139,7 +139,7 @@ jobs:
           python-version: '3.10'
 
       - name: Download Images and Rewrite Feed
-        run: paradigmal-bulten/python process_images.py
+        run: paradigmal-bulten/process_images.py
       # --- NEW STEPS END HERE ---
 
       - name: Commit and push changes
