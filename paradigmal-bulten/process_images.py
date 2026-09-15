@@ -75,7 +75,7 @@ timestamp_data = {
     'last_updated_readable': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
 }
 
-with open(metadata_path, 'w', encoding='utf-8') as f:
+with open(metadata_path, 'w+', encoding='utf-8') as f:
     json.dump(timestamp_data, f)
 
 print("Finished processing images.")
