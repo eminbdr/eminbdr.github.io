@@ -118,8 +118,26 @@
     .article-meta {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 11px;
       color: #777;
+    }
+
+    .source-info {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    .source-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background-color: #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
     /* Card / Grid View Overrides */
@@ -177,6 +195,10 @@
     #news-feed.card-view .article-meta {
       color: #bbb;
     }
+
+    #news-feed.card-view .source-icon {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -202,6 +224,31 @@
 
       btn.innerText = isCardView ? "List View" : "Card View";
       localStorage.setItem("preferred_view", isCardView ? "card" : "list");
+    }
+
+    // Resolves source title to icon path from paradigmal-bulten/icons/
+    function getSourceLogo(sourceName) {
+      if (!sourceName) return '';
+
+      const slug = sourceName
+        .toLowerCase()
+        .trim()
+        .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+        .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+        .replace(/['’]/g, '')
+        .replace(/[^a-z0-9]/g, '');
+
+      const iconMap = {
+        "doganincocuklari": "paradigmal-bulten/icons/doganincocuklari.png",
+        "elyazmalari": "paradigmal-bulten/icons/elyazmaları.avif",
+        "heryercocuk": "paradigmal-bulten/icons/heryercocuk.jpeg",
+        "kampuscadilari": "paradigmal-bulten/icons/kampuscadilari.webp",
+        "motorlukuryeiscileri": "paradigmal-bulten/icons/motorlukuryeiscileri.jpeg",
+        "ozgurlukcugenclik": "paradigmal-bulten/icons/ozgurlukcugenclik.webp",
+        "toplumsalozgurlukpartisi": "paradigmal-bulten/icons/toplumsalozgurlukpartisi.png"
+      };
+
+      return iconMap[slug] || '';
     }
 
     fetch('feed.xml')
@@ -233,6 +280,7 @@
           const linkNode = el.querySelector("link");
           const link = linkNode?.getAttribute("href") || linkNode?.textContent || "#";
           const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
+          const logoUrl = getSourceLogo(sourceName);
           
           let imageUrl = '';
           const contentText = el.querySelector("content, summary, description")?.textContent || "";
@@ -250,7 +298,7 @@
             if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
 
-          // Clean HTML tags and decode HTML entities for plain-text snippet
+          // Clean HTML tags for plain-text snippet
           const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
           const snippetText = (parsedSnippetDoc.body.textContent || "").trim();
 
@@ -273,7 +321,10 @@
                 <div class="article-title">${title}</div>
                 ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ''}
                 <div class="article-meta">
-                  <span>${sourceName}</span>
+                  <span class="source-info">
+                    ${logoUrl ? `<img src="${logoUrl}" class="source-icon" alt="" onerror="this.style.display='none'" />` : ''}
+                    <span>${sourceName}</span>
+                  </span>
                   <span>${dateStr}</span>
                 </div>
               </div>
