@@ -22,9 +22,21 @@
       padding: 10px 5px;
     }
 
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     h1 { 
       margin: 0; 
       font-size: 20px; 
+    }
+
+    .update-timestamp {
+      font-size: 12px;
+      color: #777;
+      font-weight: normal;
     }
 
     .btn-toggle {
@@ -203,7 +215,10 @@
 <body>
 
   <div class="header-bar">
-    <h1>Latest News</h1>
+    <div class="header-left">
+      <h1>Latest News</h1>
+      <div class="update-timestamp" id="update-time">Loading...</div>
+    </div>
     <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">Card View</button>
   </div>
 
@@ -225,6 +240,27 @@
       localStorage.setItem("preferred_view", isCardView ? "card" : "list");
     }
 
+    // Load and display the timestamp
+    function loadTimestamp() {
+      fetch('feed_metadata.json')
+        .then(response => {
+          if (!response.ok) {
+            document.getElementById("update-time").textContent = "Last updated: unknown";
+            return;
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data && data.last_updated_readable) {
+            document.getElementById("update-time").textContent = `Last updated: ${data.last_updated_readable}`;
+          }
+        })
+        .catch(err => {
+          console.warn("Could not load timestamp:", err);
+          document.getElementById("update-time").textContent = "Last updated: unknown";
+        });
+    }
+
     // Maps source titles to icon file names in your icons folder
     function getSourceIcon(sourceTitle) {
       if (!sourceTitle) return null;
@@ -243,6 +279,10 @@
       return null;
     }
 
+    // Load timestamp first
+    loadTimestamp();
+
+    // Then load feed
     fetch('feed.xml')
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
