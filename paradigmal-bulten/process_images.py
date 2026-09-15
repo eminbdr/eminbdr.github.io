@@ -4,7 +4,7 @@ import html
 import urllib.request
 import hashlib
 
-# Get the exact directory where this script is located (the paradigmal-bulten folder)
+# Get the exact directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Define absolute paths based on the script's location
@@ -23,7 +23,8 @@ except FileNotFoundError:
     exit(1)
 
 # Find all raw image URLs in the XML content
-img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn)[^"\'<>\s]*)', content)
+# FIXED: Added `instagram\.com/p/[^"\'<>\s]+/media` to catch single-image and video poster endpoints
+img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn|instagram\.com/p/[^"\'<>\s]+/media)[^"\'<>\s]*)', content)
 
 for raw_url in set(img_urls):
     try:
