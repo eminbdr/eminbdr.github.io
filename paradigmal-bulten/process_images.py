@@ -27,8 +27,15 @@ img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn)[^"\
 
 for raw_url in set(img_urls):
     try:
-        # 1. Decode HTML entities (&amp; -> &) to restore the real URL signature
-        clean_url = html.unescape(raw_url)
+        # Clean up XML/HTML entities that the regex might have over-captured
+        clean_raw = raw_url
+        if clean_raw.endswith('&quot;'):
+            clean_raw = clean_raw[:-6]
+        if clean_raw.endswith('&lt;'):
+            clean_raw = clean_raw[:-4]
+            
+        # 1. Decode HTML entities to restore the real URL signature
+        clean_url = html.unescape(clean_raw)
         
         # 2. Create a unique filename based on the cleaned URL
         filename = hashlib.md5(clean_url.encode()).hexdigest() + '.jpg'
@@ -40,18 +47,19 @@ for raw_url in set(img_urls):
             req = urllib.request.Request(
                 clean_url, 
                 headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                     'Accept': 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8'
                 }
             )
             with urllib.request.urlopen(req) as response, open(filepath, 'wb') as out_file:
                 out_file.write(response.read())
         
-        # 4. Replace the original raw XML link with the local image path
-        content = content.replace(raw_url, f'images/{filename}')
+        # 4. Replace using the CLEANED raw string in the XML
+        content = content.replace(clean_raw, f'images/{filename}')
         
     except Exception as e:
-        print(f"Failed to download image: {e}")
+        print(f"Failed to download image {clean_raw}: {e}")
+
 
 # Save the updated feed.xml
 with open(feed_path, 'w', encoding='utf-8') as f:
