@@ -124,11 +124,6 @@ jobs:
             $master->asXML("paradigmal-bulten/feed.xml");
           '
           
-      - name: Commit Updated Feed
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Automated feed update"
-          file_pattern: "paradigmal-bulten/feed.xml"
 
       # ... (your previous steps that generate feed.xml via RSS-Bridge) ...
 
