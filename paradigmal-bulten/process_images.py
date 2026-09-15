@@ -5,6 +5,7 @@ import urllib.request
 import hashlib
 import json
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # Get the exact directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -69,10 +70,13 @@ for raw_url in set(img_urls):
 with open(feed_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
-# Write timestamp metadata for display in HTML
+# Write timestamp metadata for display in HTML (using Turkey timezone UTC+3)
+turkey_tz = ZoneInfo('Europe/Istanbul')
+now_turkey = datetime.now(turkey_tz)
+
 timestamp_data = {
-    'last_updated': datetime.utcnow().isoformat() + 'Z',
-    'last_updated_readable': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    'last_updated': now_turkey.isoformat(),
+    'last_updated_readable': now_turkey.strftime('%Y-%m-%d %H:%M:%S %Z')
 }
 
 with open(metadata_path, 'w', encoding='utf-8') as f:
