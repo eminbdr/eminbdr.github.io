@@ -24,11 +24,24 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
 
+      - name: Cache PHP Setup
+        id: cache-php
+        uses: actions/cache@v4
+        with:
+          path: ~/.php-cache
+          key: php-8.2-cache-${{ runner.os }}
+
       - name: Setup PHP
+        if: steps.cache-php.outputs.cache-hit != 'true'
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, simplexml, curl, intl, dom
+
+      - name: Use cached PHP (if available)
+        if: steps.cache-php.outputs.cache-hit == 'true'
+        run: |
+          echo "Using cached PHP setup"
 
       - name: Fetch and Merge RSS Feeds
         run: |
