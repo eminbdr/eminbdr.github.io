@@ -290,6 +290,13 @@
             if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
           }
 
+          // --- NEW: Proxy Instagram Images ---
+          // If the extracted image is from Instagram's CDN, route it through wsrv.nl
+          if (imageUrl && (imageUrl.includes('cdninstagram.com') || imageUrl.includes('fbcdn.net'))) {
+            imageUrl = 'https://wsrv.nl/?url=' + encodeURIComponent(imageUrl);
+          }
+          // -----------------------------------
+
           // Clean HTML tags and decode HTML entities for plain-text snippet
           const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
           const snippetText = (parsedSnippetDoc.body.textContent || "").trim();
