@@ -35,7 +35,7 @@ jobs:
         id: cache-php
         uses: actions/cache@v4
         with:
-          path: ~/.php-cache
+          path: /.php-cache
           key: php-8.2-cache-${{ runner.os }}
 
       - name: Use cached PHP (if available)
