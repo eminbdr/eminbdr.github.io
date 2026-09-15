@@ -219,6 +219,7 @@
       <h1>Latest News</h1>
       <div class="update-timestamp" id="update-time">Loading...</div>
     </div>
+    <button id="refresh-btn" class="btn-toggle" onclick="refreshFeed()">Refresh</button>
     <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">Card View</button>
   </div>
 
@@ -240,9 +241,13 @@
       localStorage.setItem("preferred_view", isCardView ? "card" : "list");
     }
 
+    function refreshFeed() {
+      window.location.href = `${window.location.pathname}?refresh=${Date.now()}`;
+    }
+
     // Load and display the timestamp
     function loadTimestamp() {
-      fetch('feed_metadata.json')
+      fetch(`feed_metadata.json?v=${Date.now()}`, { cache: "no-store" })
         .then(response => {
           if (!response.ok) {
             document.getElementById("update-time").textContent = "Last updated: unknown";
@@ -283,7 +288,7 @@
     loadTimestamp();
 
     // Then load feed
-    fetch('feed.xml')
+    fetch(`feed.xml?v=${Date.now()}`, { cache: "no-store" })
       .then(response => {
         if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         return response.text();
