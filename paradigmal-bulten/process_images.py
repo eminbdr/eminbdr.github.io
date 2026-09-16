@@ -143,23 +143,32 @@ def download_and_process_image(url_info):
         return (clean_raw, filename, False)
 
 
-def remove_unreferenced_images(feed_content):
+def remove_unreferenced_images(feed_content, original_urls):
     """Remove images that are no longer referenced in the feed."""
+    # Check for both local image references AND original raw URLs
     referenced_names = {
         match.group(1)
         for match in re.finditer(r'images/([^"\'<>\s]+)', feed_content)
     }
+    
+    # Also keep images if their original URLs are still in the feed
+    for url in original_urls:
+        if url in feed_content:
+            # Extract the filename that was generated from this URL
+            filename = hashlib.md5(url.encode()).hexdigest() + '.jpg'
+            referenced_names.add(filename)
+    
     removed_count = 0
     removed_bytes = 0
-
     for entry in os.scandir(images_folder):
         if not entry.is_file() or entry.name in referenced_names:
             continue
         removed_bytes += entry.stat().st_size
         os.remove(entry.path)
         removed_count += 1
-
+    
     return removed_count, removed_bytes
+removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, url in urls_to_download})
 
 
 # ============================================
