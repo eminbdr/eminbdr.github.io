@@ -7,7 +7,7 @@ import json
 import tempfile
 from PIL import Image
 from datetime import datetime
-from urllib.parse import quote
+from urllib.parse import quote, urlparse, parse_qs, urlencode
 from zoneinfo import ZoneInfo
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
@@ -51,6 +51,14 @@ def save_processed_urls(urls):
     with open(processed_urls_path, 'w', encoding='utf-8') as f:
         for url in sorted(urls):
             f.write(url + '\n')
+
+
+def normalize_url(url):
+    """
+    Normalize URL for consistent comparison.
+    Handles lowercase, trailing whitespace, and URL encoding inconsistencies.
+    """
+    return url.lower().strip()
 
 
 def download_with_retry(url, filepath, max_retries=MAX_RETRIES):
@@ -203,8 +211,14 @@ for raw_url in set(img_urls):
 # Load previously processed URLs
 processed_urls = load_processed_urls()
 
-# Filter out URLs that have already been processed
-new_urls = [(clean_raw, clean_url) for clean_raw, clean_url in urls_to_download if clean_url not in processed_urls]
+# Normalize processed URLs for consistent comparison
+processed_urls_normalized = {normalize_url(url) for url in processed_urls}
+
+# Filter out URLs that have already been processed (using normalized comparison)
+new_urls = [
+    (clean_raw, clean_url) for clean_raw, clean_url in urls_to_download 
+    if normalize_url(clean_url) not in processed_urls_normalized
+]
 
 print(f"Found {len(urls_to_download)} total unique images")
 print(f"Already processed: {len(processed_urls)} images")
@@ -244,7 +258,8 @@ removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, u
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
 # Update processed URLs with all current URLs (including already processed ones)
-all_processed = processed_urls | {url for _, url in urls_to_download}
+# Normalize all URLs when saving for consistency
+all_processed = processed_urls | {normalize_url(url) for _, url in urls_to_download}
 save_processed_urls(all_processed)
 
 # Always update timestamp metadata (signals workflow is active)
