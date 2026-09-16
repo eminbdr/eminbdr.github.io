@@ -28,8 +28,8 @@ jobs:
         id: cache-php
         uses: actions/cache@v4
         with:
-          path: /var/lib/php
-          key: php-8.2-cache-${{ runner.os }}
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - name: Setup PHP
         if: steps.cache-php.outputs.cache-hit != 'true'
@@ -85,9 +85,10 @@ jobs:
           j=0
           for user in "${INSTAGRAM_USERS[@]}"; do
             echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" || true
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" & j=$((j+1))
             j=$((j+1))
           done
+          wait
 
           # ==========================================
           # 3. OTHER RSS-BRIDGE FEEDS (PHP)
