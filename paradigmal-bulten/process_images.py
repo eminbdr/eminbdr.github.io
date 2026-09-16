@@ -20,6 +20,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 images_folder = os.path.join(BASE_DIR, 'images')
 feed_path = os.path.join(BASE_DIR, 'feed.xml')
 metadata_path = os.path.join(BASE_DIR, 'feed_metadata.json')
+processed_urls_path = os.path.join(BASE_DIR, '.processed_urls')
 
 # Create the images directory inside paradigmal-bulten if it doesn't exist
 os.makedirs(images_folder, exist_ok=True)
@@ -33,6 +34,22 @@ RETRY_DELAY = 2  # seconds, increases exponentially
 
 # Thread-safe lock for file operations
 content_lock = Lock()
+
+
+def load_processed_urls():
+    """Load the set of already processed image URLs."""
+    try:
+        with open(processed_urls_path, 'r', encoding='utf-8') as f:
+            return set(line.strip() for line in f if line.strip())
+    except FileNotFoundError:
+        return set()
+
+
+def save_processed_urls(urls):
+    """Save the set of processed image URLs for next run."""
+    with open(processed_urls_path, 'w', encoding='utf-8') as f:
+        for url in sorted(urls):
+            f.write(url + '\n')
 
 
 def download_with_retry(url, filepath, max_retries=MAX_RETRIES):
@@ -174,15 +191,23 @@ for raw_url in set(img_urls):
     clean_url = html.unescape(clean_raw)
     urls_to_download.append((clean_raw, clean_url))
 
-print(f"Found {len(urls_to_download)} unique images to process...")
+# Load previously processed URLs
+processed_urls = load_processed_urls()
 
-# Download images in parallel
-if urls_to_download:
+# Filter out URLs that have already been processed
+new_urls = [(clean_raw, clean_url) for clean_raw, clean_url in urls_to_download if clean_url not in processed_urls]
+
+print(f"Found {len(urls_to_download)} total unique images")
+print(f"Already processed: {len(processed_urls)} images")
+print(f"New images to download: {len(new_urls)}")
+
+# Download only new images in parallel
+if new_urls:
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         # Submit all download tasks
         futures = {
             executor.submit(download_and_process_image, url_info): url_info 
-            for url_info in urls_to_download
+            for url_info in new_urls
         }
         
         # Process completed downloads and update content
@@ -195,6 +220,8 @@ if urls_to_download:
             except Exception as e:
                 url_info = futures[future]
                 print(f"Worker error processing {url_info[1]}: {e}")
+else:
+    print("No new images to download. Skipping image processing.")
 
 print("All downloads completed.")
 
@@ -205,7 +232,11 @@ with open(feed_path, 'w', encoding='utf-8') as f:
 removed_count, removed_bytes = remove_unreferenced_images(content)
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
-# Write timestamp metadata for display in HTML (using Turkey timezone UTC+3)
+# Update processed URLs with all current URLs (including already processed ones)
+all_processed = processed_urls | {url for _, url in urls_to_download}
+save_processed_urls(all_processed)
+
+# Always update timestamp metadata (signals workflow is active)
 turkey_tz = ZoneInfo('Europe/Istanbul')
 now_turkey = datetime.now(turkey_tz)
 
