@@ -24,24 +24,12 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
 
-      - name: Cache PHP Setup
-        id: cache-php
-        uses: actions/cache@v4
-        with:
-          path: ~/.composer/cache
-          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-
-      - name: Setup PHP
-        if: steps.cache-php.outputs.cache-hit != 'true'
+      - name: Setup PHP (with extensions cache)
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, simplexml, curl, intl, dom
-
-      - name: Use cached PHP (if available)
-        if: steps.cache-php.outputs.cache-hit == 'true'
-        run: |
-          echo "Using cached PHP setup"
+          cache: composer
 
       - name: Fetch and Merge RSS Feeds
         run: |
@@ -66,7 +54,7 @@ jobs:
           done
 
           # ==========================================
-          # 2. INSTAGRAM USERNAMES (Clustered)
+          # 2. INSTAGRAM USERNAMES (Parallel)
           # Format: "username"
           # ==========================================
           INSTAGRAM_USERS=(
@@ -85,7 +73,7 @@ jobs:
           j=0
           for user in "${INSTAGRAM_USERS[@]}"; do
             echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" & j=$((j+1))
+            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" &
             j=$((j+1))
           done
           wait
@@ -139,9 +127,6 @@ jobs:
           '
           
 
-      # ... (your previous steps that generate feed.xml via RSS-Bridge) ...
-
-      # --- NEW STEPS START HERE ---
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -154,7 +139,6 @@ jobs:
 
       - name: Download Images and Rewrite Feed
         run: python paradigmal-bulten/process_images.py
-      # --- NEW STEPS END HERE ---
 
       - name: Commit and push changes
         run: |
