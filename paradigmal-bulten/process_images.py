@@ -37,7 +37,7 @@ content_lock = Lock()
 
 
 def load_metadata():
-    """Load metadata including processed image URLs."""
+    """Load metadata including processed image filenames."""
     try:
         with open(metadata_path, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -46,7 +46,7 @@ def load_metadata():
 
 
 def save_metadata(metadata):
-    """Save metadata including processed image URLs."""
+    """Save metadata including processed image filenames."""
     with open(metadata_path, 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
 
@@ -57,6 +57,11 @@ def normalize_url(url):
     Handles lowercase, trailing whitespace, and URL encoding inconsistencies.
     """
     return url.lower().strip()
+
+
+def get_image_filename(url):
+    """Generate the consistent filename for an image URL."""
+    return hashlib.md5(normalize_url(url).encode()).hexdigest() + '.jpg'
 
 
 def download_with_retry(url, filepath, max_retries=MAX_RETRIES):
@@ -125,7 +130,7 @@ def download_and_process_image(url_info):
     Returns tuple: (clean_raw, filename, success)
     """
     clean_raw, clean_url = url_info
-    filename = hashlib.md5(clean_url.encode()).hexdigest() + '.jpg'
+    filename = get_image_filename(clean_url)
     filepath = os.path.join(images_folder, filename)
     
     # Check if already exists
@@ -161,7 +166,7 @@ def remove_unreferenced_images(feed_content, original_urls):
     for url in original_urls:
         if url in feed_content:
             # Extract the filename that was generated from this URL
-            filename = hashlib.md5(url.encode()).hexdigest() + '.jpg'
+            filename = get_image_filename(url)
             referenced_names.add(filename)
     
     removed_count = 0
@@ -206,21 +211,18 @@ for raw_url in set(img_urls):
     clean_url = html.unescape(clean_raw)
     urls_to_download.append((clean_raw, clean_url))
 
-# Load metadata and previously processed URLs
+# Load metadata and previously processed image filenames
 metadata = load_metadata()
-processed_urls = set(metadata.get('processed_image_urls', []))
+processed_filenames = set(metadata.get('processed_image_filenames', []))
 
-# Normalize processed URLs for consistent comparison
-processed_urls_normalized = {normalize_url(url) for url in processed_urls}
-
-# Filter out URLs that have already been processed (using normalized comparison)
+# Filter out URLs that have already been processed (by checking if filename exists)
 new_urls = [
     (clean_raw, clean_url) for clean_raw, clean_url in urls_to_download 
-    if normalize_url(clean_url) not in processed_urls_normalized
+    if get_image_filename(clean_url) not in processed_filenames
 ]
 
 print(f"Found {len(urls_to_download)} total unique images")
-print(f"Already processed: {len(processed_urls)} images")
+print(f"Already processed: {len(processed_filenames)} images")
 print(f"New images to download: {len(new_urls)}")
 
 # Check if there are any new images to process
@@ -256,9 +258,10 @@ else:
 removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, url in urls_to_download})
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
-# Update metadata with all current URLs (including already processed ones)
-# Normalize all URLs when saving for consistency
-all_processed = processed_urls | {normalize_url(url) for _, url in urls_to_download}
+# Update metadata with all current image filenames (including already processed ones)
+# Generate filenames for all discovered URLs
+all_processed_filenames = {get_image_filename(url) for _, url in urls_to_download}
+combined_filenames = processed_filenames | all_processed_filenames
 
 # Always update timestamp metadata (signals workflow is active)
 turkey_tz = ZoneInfo('Europe/Istanbul')
@@ -266,13 +269,14 @@ now_turkey = datetime.now(turkey_tz)
 
 metadata['last_updated'] = now_turkey.isoformat()
 metadata['last_updated_readable'] = now_turkey.strftime('%Y-%m-%d %H:%M:%S %Z')
-metadata['processed_image_urls'] = sorted(list(all_processed))
+metadata['processed_image_filenames'] = sorted(list(combined_filenames))
+metadata['total_processed_count'] = len(combined_filenames)
 
 save_metadata(metadata)
 
 print("Finished processing images.")
 print(f"Timestamp saved: {metadata['last_updated_readable']}")
-print(f"Total processed images tracked: {len(all_processed)}")
+print(f"Total images tracked: {metadata['total_processed_count']}")
 
 # Exit with status indicating if new images were processed
 sys.exit(0 if has_new_images else 42)
