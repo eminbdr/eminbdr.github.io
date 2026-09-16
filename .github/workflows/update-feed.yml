@@ -24,12 +24,22 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
 
-      - name: Setup PHP (with extensions cache)
+      - name: Cache PHP Extensions
+        id: cache-php-extensions
+        uses: actions/cache@v4
+        with:
+          path: ~/.phpenv/versions/8.2.*/lib/php/extensions
+          key: php-extensions-8.2-${{ runner.os }}
+          restore-keys: |
+            php-extensions-8.2-
+
+      - name: Setup PHP (with extensions & composer cache)
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, simplexml, curl, intl, dom
           cache: composer
+          coverage: none
 
       - name: Fetch and Merge RSS Feeds
         run: |
