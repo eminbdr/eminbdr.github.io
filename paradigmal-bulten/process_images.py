@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
 import time
+import sys
 
 # Get the exact directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -201,8 +202,11 @@ print(f"Found {len(urls_to_download)} total unique images")
 print(f"Already processed: {len(processed_urls)} images")
 print(f"New images to download: {len(new_urls)}")
 
+# Check if there are any new images to process
+has_new_images = len(new_urls) > 0
+
 # Download only new images in parallel
-if new_urls:
+if has_new_images:
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         # Submit all download tasks
         futures = {
@@ -220,15 +224,16 @@ if new_urls:
             except Exception as e:
                 url_info = futures[future]
                 print(f"Worker error processing {url_info[1]}: {e}")
+    
+    print("All downloads completed.")
+    
+    # Save the updated feed.xml only if there were new images
+    with open(feed_path, 'w', encoding='utf-8') as f:
+        f.write(content)
 else:
     print("No new images to download. Skipping image processing.")
 
-print("All downloads completed.")
-
-# Save the updated feed.xml
-with open(feed_path, 'w', encoding='utf-8') as f:
-    f.write(content)
-
+# Always remove unreferenced images and update cleanup logs
 removed_count, removed_bytes = remove_unreferenced_images(content)
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
@@ -250,3 +255,6 @@ with open(metadata_path, 'w', encoding='utf-8') as f:
 
 print("Finished processing images.")
 print(f"Timestamp saved: {timestamp_data['last_updated_readable']}")
+
+# Exit with status indicating if new images were processed
+sys.exit(0 if has_new_images else 42)
