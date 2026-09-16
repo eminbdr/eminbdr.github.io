@@ -168,7 +168,6 @@ def remove_unreferenced_images(feed_content, original_urls):
         removed_count += 1
     
     return removed_count, removed_bytes
-removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, url in urls_to_download})
 
 
 # ============================================
@@ -215,7 +214,6 @@ print(f"New images to download: {len(new_urls)}")
 has_new_images = len(new_urls) > 0
 
 # Download only new images in parallel
-# Download only new images in parallel
 if has_new_images:
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = {
@@ -240,12 +238,9 @@ if has_new_images:
         f.write(content)
 else:
     print("No new images to download. Skipping image processing.")
-    # IMPORTANT: Reload content for cleanup step
-    with open(feed_path, 'r', encoding='utf-8') as f:
-        content = f.read()
 
 # Always remove unreferenced images and update cleanup logs
-removed_count, removed_bytes = remove_unreferenced_images(content)
+removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, url in urls_to_download})
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
 # Update processed URLs with all current URLs (including already processed ones)
