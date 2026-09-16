@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 images_folder = os.path.join(BASE_DIR, 'images')
 feed_path = os.path.join(BASE_DIR, 'feed.xml')
 metadata_path = os.path.join(BASE_DIR, 'feed_metadata.json')
-processed_urls_path = os.path.join(BASE_DIR, '.processed_urls')
 
 # Create the images directory inside paradigmal-bulten if it doesn't exist
 os.makedirs(images_folder, exist_ok=True)
@@ -37,20 +36,19 @@ RETRY_DELAY = 2  # seconds, increases exponentially
 content_lock = Lock()
 
 
-def load_processed_urls():
-    """Load the set of already processed image URLs."""
+def load_metadata():
+    """Load metadata including processed image URLs."""
     try:
-        with open(processed_urls_path, 'r', encoding='utf-8') as f:
-            return set(line.strip() for line in f if line.strip())
+        with open(metadata_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
     except FileNotFoundError:
-        return set()
+        return {}
 
 
-def save_processed_urls(urls):
-    """Save the set of processed image URLs for next run."""
-    with open(processed_urls_path, 'w', encoding='utf-8') as f:
-        for url in sorted(urls):
-            f.write(url + '\n')
+def save_metadata(metadata):
+    """Save metadata including processed image URLs."""
+    with open(metadata_path, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=2)
 
 
 def normalize_url(url):
@@ -208,8 +206,9 @@ for raw_url in set(img_urls):
     clean_url = html.unescape(clean_raw)
     urls_to_download.append((clean_raw, clean_url))
 
-# Load previously processed URLs
-processed_urls = load_processed_urls()
+# Load metadata and previously processed URLs
+metadata = load_metadata()
+processed_urls = set(metadata.get('processed_image_urls', []))
 
 # Normalize processed URLs for consistent comparison
 processed_urls_normalized = {normalize_url(url) for url in processed_urls}
@@ -257,25 +256,23 @@ else:
 removed_count, removed_bytes = remove_unreferenced_images(content, {url for _, url in urls_to_download})
 print(f"Removed {removed_count} unreferenced images ({removed_bytes / 1024 / 1024:.2f} MB).")
 
-# Update processed URLs with all current URLs (including already processed ones)
+# Update metadata with all current URLs (including already processed ones)
 # Normalize all URLs when saving for consistency
 all_processed = processed_urls | {normalize_url(url) for _, url in urls_to_download}
-save_processed_urls(all_processed)
 
 # Always update timestamp metadata (signals workflow is active)
 turkey_tz = ZoneInfo('Europe/Istanbul')
 now_turkey = datetime.now(turkey_tz)
 
-timestamp_data = {
-    'last_updated': now_turkey.isoformat(),
-    'last_updated_readable': now_turkey.strftime('%Y-%m-%d %H:%M:%S %Z')
-}
+metadata['last_updated'] = now_turkey.isoformat()
+metadata['last_updated_readable'] = now_turkey.strftime('%Y-%m-%d %H:%M:%S %Z')
+metadata['processed_image_urls'] = sorted(list(all_processed))
 
-with open(metadata_path, 'w', encoding='utf-8') as f:
-    json.dump(timestamp_data, f)
+save_metadata(metadata)
 
 print("Finished processing images.")
-print(f"Timestamp saved: {timestamp_data['last_updated_readable']}")
+print(f"Timestamp saved: {metadata['last_updated_readable']}")
+print(f"Total processed images tracked: {len(all_processed)}")
 
 # Exit with status indicating if new images were processed
 sys.exit(0 if has_new_images else 42)
