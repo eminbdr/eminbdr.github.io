@@ -56,6 +56,11 @@ def normalize_url(url):
     Normalize URL for consistent comparison.
     Handles lowercase, trailing whitespace, and URL encoding inconsistencies.
     """
+    # For Instagram CDN URLs, strip query parameters as they change constantly
+    parsed = urlparse(url.lower().strip())
+    # Reconstruct without query string for CDN URLs
+    if 'cdninstagram.com' in parsed.netloc or 'scontent' in parsed.netloc:
+        return f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
     return url.lower().strip()
 
 
