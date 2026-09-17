@@ -187,9 +187,32 @@ try:
         content = f.read()
 except FileNotFoundError:
     print(f"feed.xml not found at {feed_path}. Exiting.")
-    exit(1)
+    sys.exit(1)
 
-# Find all raw image URLs in the XML content
+# --- CAROUSEL STRIPPER ---
+# Remove all but the first image tag from each feed item to prevent carousel bloat
+def limit_images_per_item(match):
+    item_html = match.group(0)
+    img_tags = re.findall(r'<img[^>]+>', item_html, re.IGNORECASE)
+    
+    if len(img_tags) > 1:
+        first_img = img_tags[0]
+        placeholder = "___FIRST_IMG_PLACEHOLDER___"
+        # Temporarily protect the first image
+        item_html = item_html.replace(first_img, placeholder, 1)
+        
+        # Erase all remaining image tags in this item
+        item_html = re.sub(r'<img[^>]+>', '', item_html, flags=re.IGNORECASE)
+        
+        # Restore the protected first image
+        item_html = item_html.replace(placeholder, first_img, 1)
+        
+    return item_html
+
+content = re.sub(r'<item>.*?</item>|<entry>.*?</entry>', limit_images_per_item, content, flags=re.DOTALL | re.IGNORECASE)
+# -------------------------
+
+# Find all raw image URLs in the cleaned XML content
 img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn|instagram\.com/p/[^"\'<>\s]+/media)[^"\'<>\s]*)', content)
 
 urls_to_download = []
@@ -211,7 +234,6 @@ for clean_raw, clean_url in urls_to_download:
     filename = get_image_filename(clean_url)
     filepath = os.path.join(images_folder, filename)
 
-    # CRITICAL FIX: If we already have the cached image, rewrite the XML URL immediately
     if os.path.exists(filepath):
         content = content.replace(clean_raw, f'images/{filename}')
     else:
@@ -244,7 +266,7 @@ if has_new_images:
 else:
     print("No new images to download.")
 
-# CRITICAL FIX: Always save the updated feed.xml, so the newly merged PHP feed gets its local paths rewritten
+# Save the updated feed.xml
 with open(feed_path, 'w', encoding='utf-8') as f:
     f.write(content)
 
@@ -268,5 +290,4 @@ print("Finished processing images.")
 print(f"Timestamp saved: {metadata['last_updated_readable']}")
 print(f"Total images tracked: {metadata['total_processed_count']}")
 
-# CRITICAL FIX: Always exit successfully so the GitHub Action proceeds to the commit step
 sys.exit(0)
