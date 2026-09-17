@@ -56,8 +56,9 @@ def normalize_url(url):
     Handles lowercase, trailing whitespace, and URL encoding inconsistencies.
     """
     parsed = urlparse(url.lower().strip())
-    # Reconstruct without query string for CDN URLs
-    if 'cdninstagram.com' in parsed.netloc or 'scontent' in parsed.netloc:
+    # Reconstruct without query string for all Meta/Instagram CDNs
+    cdn_domains = ['cdninstagram.com', 'scontent', 'fbcdn.net']
+    if any(cdn in parsed.netloc for cdn in cdn_domains):
         return f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
     return url.lower().strip()
 
