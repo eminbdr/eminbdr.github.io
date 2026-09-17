@@ -56,10 +56,13 @@ def normalize_url(url):
     Handles lowercase, trailing whitespace, and URL encoding inconsistencies.
     """
     parsed = urlparse(url.lower().strip())
-    # Reconstruct without query string for all Meta/Instagram CDNs
+    # Meta/Instagram constantly rotate CDN subdomains (e.g., fsaw6-1 to fsaw2-1)
+    # By returning ONLY the path, we ignore shifting domains and query parameters,
+    # ensuring the hash remains 100% stable forever.
     cdn_domains = ['cdninstagram.com', 'scontent', 'fbcdn.net']
     if any(cdn in parsed.netloc for cdn in cdn_domains):
-        return f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
+        return parsed.path 
+        
     return url.lower().strip()
 
 
