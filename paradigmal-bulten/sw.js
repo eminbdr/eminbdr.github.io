@@ -20,6 +20,11 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event: Network-first, fallback to cache
 self.addEventListener('fetch', (event) => {
+  // Completely ignore requests with unsupported schemes (like chrome-extension://)
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
