@@ -15,6 +15,9 @@ mkdir -p "$FEED_DIR"
 if [ ! -d "$RSS_BRIDGE_DIR" ]; then
     echo "RSS-Bridge not found locally. Cloning..."
     git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git "$RSS_BRIDGE_DIR"
+    
+    # NEW: Delete the nested .git folder to prevent submodule crashes in GitHub Actions
+    rm -rf "$RSS_BRIDGE_DIR/.git"
 fi
 
 # 1. DIRECT RSS FEEDS (cURL)
