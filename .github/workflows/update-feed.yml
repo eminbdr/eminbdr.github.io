@@ -16,117 +16,16 @@ jobs:
         id: cache-rss-bridge
         uses: actions/cache@v4
         with:
-          path: /tmp/rss-bridge
+          path: rss-bridge
           key: rss-bridge-latest
 
-      - name: Fetch RSS-Bridge if not cached
-        if: steps.cache-rss-bridge.outputs.cache-hit != 'true'
-        run: |
-          git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
-
-      - name: Setup PHP (with extensions & composer cache)
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, simplexml, curl, intl, dom
           cache: composer
           coverage: none
-
-      - name: Fetch and Merge RSS Feeds
-        run: |
-          mkdir -p /tmp/raw_feeds
-          mkdir -p paradigmal-bulten
-
-          # ==========================================
-          # 1. DIRECT RSS FEEDS (cURL)
-          # Format: "URL"
-          # ==========================================
-          DIRECT_FEEDS=(
-            "https://www.elyazmalari.com/feed"
-            
-            
-          )
-          
-          i=0
-          for url in "${DIRECT_FEEDS[@]}"; do
-            echo "Fetching Direct Feed: $url"
-            curl -sL "$url" > "/tmp/raw_feeds/direct_$i.xml" || true
-            i=$((i+1))
-          done
-
-          # ==========================================
-          # 2. INSTAGRAM USERNAMES (Parallel)
-          # Format: "username"
-          # ==========================================
-          INSTAGRAM_USERS=(
-            "kampus.cadilari"
-            "motorlukuryeiscileri"
-            "toplumsal.ozgurluk.partisi"
-            "ozgurlukcugenclik"
-            "peri_hankoca"
-            "doganincocuklari"
-            "elyazmalaricom"
-            "heryercocuk"
-            
-            
-          )
-
-          j=0
-          for user in "${INSTAGRAM_USERS[@]}"; do
-            echo "Fetching Instagram Feed: @$user"
-            php /tmp/rss-bridge/index.php action=display bridge=Instagram context=Username u="$user" media_type=all format=Mrss > "/tmp/raw_feeds/insta_$j.xml" &
-            j=$((j+1))
-          done
-          wait
-
-          # ==========================================
-          # 3. OTHER RSS-BRIDGE FEEDS (PHP)
-          # Format: "bridge_parameters"
-          # ==========================================
-          OTHER_BRIDGE_FEEDS=(
-            # "action=display bridge=Twitter context=By+username u=someone format=Mrss"
-            
-            
-          )
-          
-          k=0
-          for params in "${OTHER_BRIDGE_FEEDS[@]}"; do
-            echo "Fetching Bridge Feed: $params"
-            php /tmp/rss-bridge/index.php $params > "/tmp/raw_feeds/other_bridge_$k.xml" || true
-            k=$((k+1))
-          done
-
-          # ==========================================
-          # 4. MERGE ALL FEEDS INTO paradigmal-bulten/feed.xml
-          # ==========================================
-          php -r '
-            $master = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><title>Unified Feed</title></channel></rss>");
-            $targetDom = dom_import_simplexml($master->channel);
-
-            foreach (glob("/tmp/raw_feeds/*.xml") as $file) {
-              libxml_use_internal_errors(true);
-              $xml = simplexml_load_file($file);
-              if (!$xml) continue;
-
-              $channelTitle = (string)($xml->channel->title ?? $xml->title ?? "News Source");
-              $items = $xml->xpath("//item | //entry");
-
-              if ($items) {
-                foreach ($items as $item) {
-                  $domNode = dom_import_simplexml($item);
-                  
-                  // Inject feed title into item for source identification
-                  $srcNode = $domNode->ownerDocument->createElement("sourceTitle", htmlspecialchars($channelTitle));
-                  $domNode->appendChild($srcNode);
-
-                  $imported = $targetDom->ownerDocument->importNode($domNode, true);
-                  $targetDom->appendChild($imported);
-                }
-              }
-            }
-            $master->asXML("paradigmal-bulten/feed.xml");
-          '
-          
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -138,8 +37,10 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install -r paradigmal-bulten/requirements.txt
 
-      - name: Download Images and Rewrite Feed
-        run: python paradigmal-bulten/process_images.py
+      - name: Execute Build Script
+        run: |
+          chmod +x build_feed.sh
+          ./build_feed.sh
 
       - name: Commit and push changes
         run: |

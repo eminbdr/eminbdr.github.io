@@ -1,0 +1,9 @@
+# Local cache folders
+.raw_feeds/
+rss-bridge/
+__pycache__/
+*.pyc
+
+# Keep the images folder tracked, but ignore OS files
+.DS_Store
+Thumbs.db
