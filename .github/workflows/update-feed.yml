@@ -11,16 +11,18 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        with:
-          submodules: false
-          fetch-depth: 1
 
       - name: Cache RSS-Bridge
         id: cache-rss-bridge
         uses: actions/cache@v4
         with:
-          path: rss-bridge
+          path: /tmp/rss-bridge
           key: rss-bridge-latest
+
+      - name: Fetch RSS-Bridge if not cached
+        if: steps.cache-rss-bridge.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 https://github.com/RSS-Bridge/rss-bridge.git /tmp/rss-bridge
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
