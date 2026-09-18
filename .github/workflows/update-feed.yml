@@ -52,5 +52,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add paradigmal-bulten/feed.xml paradigmal-bulten/images/ paradigmal-bulten/feed_metadata.json
-          git commit -m "Update feed and download images" || echo "No changes to commit"
+          # Add [skip ci] to prevent triggering the gh-pages build workflow
+          git commit -m "Update feed and download images [skip ci]" || echo "No changes to commit"
           git push
