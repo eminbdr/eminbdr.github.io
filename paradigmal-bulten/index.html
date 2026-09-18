@@ -90,17 +90,30 @@
       return null;
     }
 
-    let activeFilters = new Set();
+let activeFilters = new Set();
     let sourceColors = {};
 
-    // 1. Fetch metadata for colors and timestamp
+    // Map the EXACT feed titles to your colors
+    const exactSourceColors = {
+      "El Yazmaları": "#c12332",
+      "elyazmalaricom - Instagram": "#c12332",
+      "motorlukuryeiscileri - Instagram": "#1c1919",
+      "toplumsal.ozgurluk.partisi - Instagram": "#f9c835",
+      "kampus.cadilari - Instagram": "#742f8b",
+      "doganincocuklari - Instagram": "#991b1b",
+      "ozgurlukcugenclik - Instagram": "#0e58a1",
+      "heryercocuk - Instagram": "#fde801",
+      "peri_hankoca - Instagram": "#69498d",
+      "default": "#555555"
+    };
+
+    // 1. Fetch metadata for timestamp
     fetch(`feed_metadata.json?v=${Date.now()}`, { cache: "no-store" })
       .then(res => res.ok ? res.json() : {})
       .then(metadata => {
         if (metadata.last_updated_readable) {
           document.getElementById("update-time").textContent = `Last updated: ${metadata.last_updated_readable}`;
         }
-        const colorCodes = metadata.color_codes || ["#333"];
 
         // 2. Fetch the XML feed
         return fetch(`feed.xml?v=${Date.now()}`, { cache: "no-store" })
@@ -129,15 +142,19 @@
             const filterBar = document.createElement("div");
             filterBar.className = "filter-bar";
             
-            uniqueSources.forEach((source, index) => {
-              const color = colorCodes[index % colorCodes.length];
+            uniqueSources.forEach((source) => {
+              // Exact match from the dictionary
+              const color = exactSourceColors[source] || exactSourceColors["default"];
               sourceColors[source] = color;
-              activeFilters.add(source); // All visible by default
+              activeFilters.add(source); 
               
+              // Clean up the name for the button display
+              const displaySourceName = source.replace(" - Instagram", "").replace("@", "").trim();
+
               const btn = document.createElement("button");
               btn.className = "filter-btn";
               btn.style.backgroundColor = color;
-              btn.innerText = source;
+              btn.innerText = displaySourceName;
               
               // Toggle logic
               btn.onclick = () => {
@@ -193,17 +210,18 @@
 
               const iconUrl = getSourceIcon(sourceName);
               const cardColor = sourceColors[sourceName];
+              const displaySourceName = sourceName.replace(" - Instagram", "").replace("@", "").trim();
 
               // Add data-source attribute and colored left border
               feedHtml += `
                 <a href="${link}" target="_blank" data-source="${sourceName}" class="article-card" style="border-left: 5px solid ${cardColor}">
-                  ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${sourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
+                  ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
                   ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
                   <div class="article-overlay">
                     <div class="article-title">${title}</div>
                     ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ''}
                     <div class="article-meta">
-                      <span style="color: ${cardColor}; font-weight: bold;">${sourceName}</span>
+                      <span style="color: ${cardColor}; font-weight: bold;">${displaySourceName}</span>
                       <span>${dateStr}</span>
                     </div>
                   </div>
