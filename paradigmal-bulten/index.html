@@ -25,7 +25,6 @@
       <h1>Latest News</h1>
       <div class="update-timestamp" id="update-time">Loading...</div>
     </div>
-    <button id="refresh-btn" class="btn-toggle" onclick="refreshFeed()">Refresh</button>
     <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">Card View</button>
   </div>
 
@@ -45,10 +44,6 @@
 
       btn.innerText = isCardView ? "List View" : "Card View";
       localStorage.setItem("preferred_view", isCardView ? "card" : "list");
-    }
-
-    function refreshFeed() {
-      window.location.href = `${window.location.pathname}?refresh=${Date.now()}`;
     }
 
     // Load and display the timestamp
@@ -90,7 +85,7 @@
       return null;
     }
 
-let activeFilters = new Set();
+    let activeFilters = new Set();
     let sourceColors = {};
 
     // Map the EXACT feed titles to your colors
@@ -103,6 +98,7 @@ let activeFilters = new Set();
       "doganincocuklari - Instagram": "#991b1b",
       "ozgurlukcugenclik - Instagram": "#0e58a1",
       "heryercocuk - Instagram": "#fde801",
+      "peri_hankoca - Instagram": "#69498d",
       "default": "#555555"
     };
 
