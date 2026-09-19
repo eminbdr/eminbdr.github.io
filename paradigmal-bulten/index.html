@@ -103,7 +103,7 @@
     };
 
     // 1. Fetch metadata for timestamp
-    fetch(`feed_metadata.json`, { cache: "no-store" })
+    fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed_metadata.json`, { cache: "no-store" })
       .then(res => res.ok ? res.json() : {})
       .then(metadata => {
         if (metadata.last_updated_readable) {
@@ -111,7 +111,7 @@
         }
 
         // 2. Fetch the XML feed
-        return fetch(`feed.xml`, { cache: "no-store" })
+        return fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed.xml`, { cache: "no-store" })
           .then(response => {
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
             return response.text();
