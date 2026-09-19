@@ -192,7 +192,7 @@
               if (imageUrl && !imageUrl.match(/^(?:https?:\/\/|\/\/|data:)/i)) {
                 // Remove any leading slash from the local URL to avoid a double slash
                 const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl;
-                imageUrl = `https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/${cleanPath}`;
+                imageUrl = `https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/${cleanPath}?raw=true`;
               }
 
               const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
