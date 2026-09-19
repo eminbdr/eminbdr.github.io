@@ -7,3 +7,8 @@ __pycache__/
 # Keep the images folder tracked, but ignore OS files
 .DS_Store
 Thumbs.db
+
+# Feed Update
+images/
+feed_metadata.json
+feed.xml
