@@ -210,8 +210,8 @@
               // Add data-source attribute and colored left border
               feedHtml += `
                 <a href="${link}" target="_blank" data-source="${sourceName}" class="article-card" style="border-left: 5px solid ${cardColor}">
-                  ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
-                  ${imageUrl ? `<img src="https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/images/${imageUrl}?raw=true" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
+                  ${iconUrl ? `<img src="https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
+                  ${imageUrl ? `<img src="https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/${imageUrl}?raw=true" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
                   <div class="article-overlay">
                     <div class="article-title">${title}</div>
                     ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ''}
