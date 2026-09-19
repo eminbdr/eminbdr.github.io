@@ -184,10 +184,34 @@ def remove_unreferenced_images(feed_content, original_urls):
 # ============================================
 # Main execution
 # ============================================
+import xml.etree.ElementTree as ET
 
 try:
     with open(feed_path, 'r', encoding='utf-8') as f:
         content = f.read()
+        img_urls = []
+    ET.register_namespace('media', 'http://search.yahoo.com/mrss/')
+    # Use fromstring() to parse the raw string content
+    root = ET.fromstring(content)
+
+    for item in root.findall('.//item'):
+        # Remove extra <media:content> elements beyond the first
+        media_content = item.findall('{http://search.yahoo.com/mrss/}content')
+        img_urls.append(media_content[0].get('url')) if media_content else None
+        for extra_media in media_content[1:]:
+            item.remove(extra_media)
+        
+        # Keep only the first image tag in <description>
+        desc_elem = item.find('description')
+        if desc_elem is not None and desc_elem.text:
+            image_links = re.findall(r'<a href="images/[^"]+" target="_blank"><img src="images/[^"]+" alt="[^"]*" /></a><br>', desc_elem.text)
+            if len(image_links) > 1:
+                caption_text = desc_elem.text.split('<br><br>', 1)[-1] if '<br><br>' in desc_elem.text else desc_elem.text
+                desc_elem.text = f"{image_links[0]}<br><br>{caption_text}"
+
+    # Convert the modified Element object back to a raw XML string
+    content = ET.tostring(root, encoding='utf-8', xml_declaration=True).decode('utf-8')
+
 except FileNotFoundError:
     print(f"feed.xml not found at {feed_path}. Exiting.")
     sys.exit(1)
@@ -216,7 +240,7 @@ content = re.sub(r'<item>.*?</item>|<entry>.*?</entry>', limit_images_per_item, 
 # -------------------------
 
 # Find all raw image URLs in the cleaned XML content
-img_urls = re.findall(r'(https?://[^"\'<>\s]*(?:scontent|cdninstagram|fbcdn|instagram\.com/p/[^"\'<>\s]+/media)[^"\'<>\s]*)', content)
+
 
 urls_to_download = []
 for raw_url in set(img_urls):
