@@ -8,6 +8,8 @@ on:
       - 'images/**'
       - 'feed_metadata.json'
       - 'feed.xml'
+      - '../github/workflows/**'
+      - 'process_images.py'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
