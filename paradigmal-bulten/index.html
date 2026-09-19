@@ -182,7 +182,7 @@
               const posterMatch = contentText.match(/poster=["']([^"']+)["']/i);
               
               if (imgMatch) imageUrl = 'https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/'+imgMatch[1];
-              else if (posterMatch) imageUrl = 'https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/'+posterMatch[1];
+              else if (posterMatch) imageUrl = posterMatch[1];
               else {
                 const media = el.querySelector("[url], enclosure[type^='image']");
                 if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
