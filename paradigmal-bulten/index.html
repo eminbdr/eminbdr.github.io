@@ -177,15 +177,22 @@
               const sourceName = el.querySelector("sourceTitle")?.textContent || "News Source";
               const contentText = el.querySelector("content, summary, description")?.textContent || "";
               
-              let imageUrl = '';
+              let  = '';
               const imgMatch = contentText.match(/<img[^>]+src=["']([^"']+)["']/i);
               const posterMatch = contentText.match(/poster=["']([^"']+)["']/i);
               
-              if (imgMatch) imageUrl = 'https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/'+imgMatch[1];
+              if (imgMatch) imageUrl = imgMatch[1];
               else if (posterMatch) imageUrl = posterMatch[1];
               else {
                 const media = el.querySelector("[url], enclosure[type^='image']");
                 if (media) imageUrl = media.getAttribute('url') || media.getAttribute('href');
+              }
+
+              // Check if an image was found and if it's a local reference
+              if (imageUrl && !imageUrl.match(/^(?:https?:\/\/|\/\/|data:)/i)) {
+                // Remove any leading slash from the local URL to avoid a double slash
+                const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl;
+                imageUrl = `https://github.com/eminbdr/eminbdr.github.io/blob/master/paradigmal-bulten/${cleanPath}`;
               }
 
               const parsedSnippetDoc = new window.DOMParser().parseFromString(contentText, "text/html");
@@ -211,7 +218,7 @@
               feedHtml += `
                 <a href="${link}" target="_blank" data-source="${sourceName}" class="article-card" style="border-left: 5px solid ${cardColor}">
                   ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ''}
-                  ${imageUrl ? `<img src="${imageUrl}?raw=true" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
+                  ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ''}
                   <div class="article-overlay">
                     <div class="article-title">${title}</div>
                     ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ''}
