@@ -1,147 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel><title>Unified Feed</title><item>
-      <title>Bridge returned error 500! (20714)</title>
-      <link>http://</link>
-      <guid isPermaLink="false">e67de59c1b65a1aa80fea1acd9608d2f20cffc6e</guid>
-      <pubDate>Fri, 18 Sep 2026 23:08:12 +0000</pubDate>
-      <description>
-&lt;div class="error"&gt;
-
-            
-        
-        
-        
-        
-        
-                    &lt;p&gt;
-                &lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"&gt;
-                    https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500                &lt;/a&gt;
-            &lt;/p&gt;
-        
-    
-    &lt;h2&gt;Details&lt;/h2&gt;
-
-    &lt;div style="margin-bottom: 15px"&gt;
-        &lt;div class="error-type"&gt;
-            &lt;strong&gt;Type:&lt;/strong&gt; HttpException        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;Code:&lt;/strong&gt; 500        &lt;/div&gt;
-
-        &lt;div class="error-message"&gt;
-            &lt;strong&gt;Message:&lt;/strong&gt; https://www.instagram.com/kampus.cadilari/embed/ resulted in 500 Internal Server Error        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;File:&lt;/strong&gt; lib/http.php        &lt;/div&gt;
-
-        &lt;div&gt;
-            &lt;strong&gt;Line:&lt;/strong&gt; 34        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;h2&gt;Trace&lt;/h2&gt;
-
-            &lt;code&gt;
-            #0 index.php(73): RssBridge-&amp;gt;main()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #1 lib/RssBridge.php(39): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #2 lib/RssBridge.php(37): BasicAuthMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #3 middlewares/BasicAuthMiddleware.php(13): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #4 lib/RssBridge.php(37): CacheMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #5 middlewares/CacheMiddleware.php(44): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #6 lib/RssBridge.php(37): ExceptionMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #7 middlewares/ExceptionMiddleware.php(17): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #8 lib/RssBridge.php(37): SecurityMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #9 middlewares/SecurityMiddleware.php(19): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #10 lib/RssBridge.php(37): MaintenanceMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #11 middlewares/MaintenanceMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #12 lib/RssBridge.php(37): TokenAuthenticationMiddleware-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #13 middlewares/TokenAuthenticationMiddleware.php(10): RssBridge-&amp;gt;{closure}()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #14 lib/RssBridge.php(34): DisplayAction-&amp;gt;__invoke()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #15 actions/DisplayAction.php(54): DisplayAction-&amp;gt;createResponse()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #16 actions/DisplayAction.php(89): InstagramBridge-&amp;gt;collectData()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #17 bridges/InstagramBridge.php(126): InstagramBridge-&amp;gt;getInstagramJSON()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #18 bridges/InstagramBridge.php(303): InstagramBridge-&amp;gt;getInstagramJSONFallback()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #19 bridges/InstagramBridge.php(335): InstagramBridge-&amp;gt;getContents()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #20 bridges/InstagramBridge.php(97): getContents()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #21 lib/contents.php(131): HttpException::fromResponse()        &lt;/code&gt;
-        &lt;br&gt;
-            &lt;code&gt;
-            #22 lib/http.php(34)        &lt;/code&gt;
-        &lt;br&gt;
-    
-    &lt;br&gt;
-
-    &lt;h2&gt;Context&lt;/h2&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;Query:&lt;/strong&gt;     &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;Version:&lt;/strong&gt; 2025-08-05    &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;OS:&lt;/strong&gt; Linux    &lt;/div&gt;
-
-    &lt;div&gt;
-        &lt;strong&gt;PHP:&lt;/strong&gt; 8.2.33    &lt;/div&gt;
-
-    &lt;br&gt;
-
-    &lt;a href="/"&gt;Go back&lt;/a&gt;
-&lt;/div&gt;
-
-
-&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues?q=is%3Aissue+is%3Aopen+kampus.cadilari+-+Instagram" title="Opens GitHub to search for similar issues"&gt;
-    &lt;button&gt;Find similar bugs&lt;/button&gt;
-&lt;/a&gt;
-
-&lt;a href="https://github.com/RSS-Bridge/rss-bridge/issues/new?title=kampus.cadilari+-+Instagram+failed+with%3A+https%3A%2F%2Fwww.instagram.com%2Fkampus.cadilari%2Fembed%2F+resulted+in+500+Internal+Server+Error&amp;body=%60%60%60%0AHttpException%3A+https%3A%2F%2Fwww.instagram.com%2Fkampus.cadilari%2Fembed%2F+resulted+in+500+Internal+Server+Error+in+lib%2Fhttp.php+line+34%0A%0Aindex.php%2873%29%3A+RssBridge-%3Emain%28%29%0Alib%2FRssBridge.php%2839%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+BasicAuthMiddleware-%3E__invoke%28%29%0Amiddlewares%2FBasicAuthMiddleware.php%2813%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+CacheMiddleware-%3E__invoke%28%29%0Amiddlewares%2FCacheMiddleware.php%2844%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+ExceptionMiddleware-%3E__invoke%28%29%0Amiddlewares%2FExceptionMiddleware.php%2817%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+SecurityMiddleware-%3E__invoke%28%29%0Amiddlewares%2FSecurityMiddleware.php%2819%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+MaintenanceMiddleware-%3E__invoke%28%29%0Amiddlewares%2FMaintenanceMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2837%29%3A+TokenAuthenticationMiddleware-%3E__invoke%28%29%0Amiddlewares%2FTokenAuthenticationMiddleware.php%2810%29%3A+RssBridge-%3E%7Bclosure%7D%28%29%0Alib%2FRssBridge.php%2834%29%3A+DisplayAction-%3E__invoke%28%29%0Aactions%2FDisplayAction.php%2854%29%3A+DisplayAction-%3EcreateResponse%28%29%0Aactions%2FDisplayAction.php%2889%29%3A+InstagramBridge-%3EcollectData%28%29%0Abridges%2FInstagramBridge.php%28126%29%3A+InstagramBridge-%3EgetInstagramJSON%28%29%0Abridges%2FInstagramBridge.php%28303%29%3A+InstagramBridge-%3EgetInstagramJSONFallback%28%29%0Abridges%2FInstagramBridge.php%28335%29%3A+InstagramBridge-%3EgetContents%28%29%0Abridges%2FInstagramBridge.php%2897%29%3A+getContents%28%29%0Alib%2Fcontents.php%28131%29%3A+HttpException%3A%3AfromResponse%28%29%0Alib%2Fhttp.php%2834%29%0A%0AQuery+string%3A+%0AVersion%3A+2025-08-05%0AOs%3A+Linux%0APHP+version%3A+8.2.33%0A%60%60%60%0AMaintainer%3A+%40No+maintainer&amp;labels=Bridge-Broken&amp;assignee=N" title="After clicking this button you can review the issue before submitting it"&gt;
-    &lt;button&gt;Create GitHub Issue&lt;/button&gt;
-&lt;/a&gt;
-
-&lt;p class="maintainer"&gt;
-    No maintainer&lt;/p&gt;</description>
+<rss version="2.0"><channel><title>Unified Feed</title><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>DENİZ İNHANLI’YI YENİDEN TEŞHİR EDİYORUZ!...</title>
+      <link>https://www.instagram.com/p/DdZAin1jC94/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdZAin1jC94/</guid>
+      <pubDate>Thu, 17 Sep 2026 13:50:52 +0000</pubDate>
+      <description>&lt;a href="images/eb4e7be146e6c32dd05739f8b3b04bc6.jpg" target="_blank"&gt;&lt;img src="images/eb4e7be146e6c32dd05739f8b3b04bc6.jpg" alt="DENİZ İNHANLI’YI YENİDEN TEŞHİR EDİYORUZ!..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/79da6b8c963e9c4ee8ad88aaeb1d0dfd.jpg" target="_blank"&gt;&lt;img src="images/79da6b8c963e9c4ee8ad88aaeb1d0dfd.jpg" alt="DENİZ İNHANLI’YI YENİDEN TEŞHİR EDİYORUZ!..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/765dc127ba149e9c8fa03ee917f91150.jpg" target="_blank"&gt;&lt;img src="images/765dc127ba149e9c8fa03ee917f91150.jpg" alt="DENİZ İNHANLI’YI YENİDEN TEŞHİR EDİYORUZ!..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/c29146cda11136ad577fd7913b6bdcff.jpg" target="_blank"&gt;&lt;img src="images/c29146cda11136ad577fd7913b6bdcff.jpg" alt="DENİZ İNHANLI’YI YENİDEN TEŞHİR EDİYORUZ!..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;DENİZ İNHANLI&amp;rsquo;YI YENİDEN TEŞHİR EDİYORUZ!&lt;br /&gt;
+&lt;br /&gt;
+Daha &amp;ouml;nce kadınları Linkedln uygulaması &amp;uuml;zerinden taciz ettiği i&amp;ccedil;in teşhir ettiğimiz Deniz İnhanlı, &amp;ldquo;teşhiri reklam olarak g&amp;ouml;rd&amp;uuml;ğ&amp;uuml;n&amp;uuml;&amp;rdquo; belirterek benzer uygulama &amp;uuml;zerinden kadınları taciz etmeye ve &amp;ouml;l&amp;uuml;m tehditleri g&amp;ouml;ndermeye devam ediyor!&lt;br /&gt;
+&lt;br /&gt;
+Deniz İnhanlı, &amp;ouml;len eski sevgilisini &amp;ouml;rnek g&amp;ouml;stererek mesajlaştığı kadını &amp;ouml;ld&amp;uuml;rmekle tehdit ediyor. &lt;br /&gt;
+&lt;br /&gt;
+Mesajlarda psikologluk yaptığını doğrulayan Deniz İnhanlı&amp;rsquo;nın profilinin bulunduğu (Yandex, DoktorTakvimi) platformlardan kendisini teşhir etmeye t&amp;uuml;m kadınları &amp;ccedil;ağırıyoruz. &lt;br /&gt;
+&lt;br /&gt;
+Sen kadınlara tehditle gelirsen sana ka&amp;ccedil;acak delik bırakmayız Deniz İnhanlı!</description>
+      <media:content url="images/eb4e7be146e6c32dd05739f8b3b04bc6.jpg" type="image/webp"/>
+      <media:content url="images/79da6b8c963e9c4ee8ad88aaeb1d0dfd.jpg" type="image/webp"/>
+      <media:content url="images/765dc127ba149e9c8fa03ee917f91150.jpg" type="image/webp"/>
+      <media:content url="images/c29146cda11136ad577fd7913b6bdcff.jpg" type="image/webp"/>
+    <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>▶ Gözaltındaki yoldaşlarımız serbest✊...</title>
+      <link>https://www.instagram.com/p/DdXB-GHtylE/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdXB-GHtylE/</guid>
+      <pubDate>Wed, 16 Sep 2026 19:25:26 +0000</pubDate>
+      <description>&lt;video controls&gt;&lt;source src="" poster="images/c3efd2e9441d64a99d4fb281b2852b0e.jpg" type="video/mp4"&gt;&lt;img src="images/c3efd2e9441d64a99d4fb281b2852b0e.jpg" alt=""&gt;&lt;/video&gt;&lt;br&gt;&lt;br&gt;G&amp;ouml;zaltındaki yoldaşlarımız serbest✊&lt;br /&gt;
+&lt;br /&gt;
+24 saati aşkın g&amp;ouml;zaltı s&amp;uuml;resince arkadaşlarımız işkenceye maruz bırakıldı, ihtiya&amp;ccedil;ları karşılanmadı. &lt;br /&gt;
+&lt;br /&gt;
+Faşizmin kurumsallaşmasıyla kadınların nafaka hakkına g&amp;ouml;z dikilmekte, erkek şiddeti cezasızlıkla sonu&amp;ccedil;landırılmakta, lgbti+ m&amp;uuml;cadelesi kriminalize edilmektedir.&lt;br /&gt;
+&lt;br /&gt;
+M&amp;uuml;cadelemizden vazge&amp;ccedil;meyeceğiz!&lt;br /&gt;
+Başka Bir Yaşam M&amp;uuml;mk&amp;uuml;n</description>
+      <media:content url="images/c3efd2e9441d64a99d4fb281b2852b0e.jpg" type="application/octet-stream"/>
+    <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>📍Mersin...</title>
+      <link>https://www.instagram.com/p/DdWvUgMjKEZ/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdWvUgMjKEZ/</guid>
+      <pubDate>Wed, 16 Sep 2026 16:41:54 +0000</pubDate>
+      <description>&lt;a href="images/3099a8317a61818f6fbb7e0a44b9f9b5.jpg" target="_blank"&gt;&lt;img src="images/3099a8317a61818f6fbb7e0a44b9f9b5.jpg" alt="📍Mersin..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/c05f8ae1c6a794d43f1a83b579f882b1.jpg" target="_blank"&gt;&lt;img src="images/c05f8ae1c6a794d43f1a83b579f882b1.jpg" alt="📍Mersin..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;video controls&gt;&lt;source src="" type="video/mp4"&gt;&lt;/video&gt;&lt;br&gt;&lt;br&gt;📍Mersin&lt;br /&gt;
+&lt;br /&gt;
+İHD Mersin Şubesi&amp;#039;nin &amp;ccedil;ağrısıyla LGBTİ+ derneklerine ve hak savunucularına y&amp;ouml;nelik yapılan &amp;quot;Ailem G&amp;uuml;vende&amp;quot; operasyonuna karşı Mersin sokaklarındayız.&lt;br /&gt;
+&lt;br /&gt;
+Buradan bir kez daha sesleniyoruz: LGBTİ+&amp;#039;lar kriminalize edilemez! Arkadaşlarımızı alacağız! &lt;br /&gt;
+&lt;br /&gt;
+Nefrete inat yaşasın hayat!</description>
+      <media:content url="images/3099a8317a61818f6fbb7e0a44b9f9b5.jpg" type="image/heic"/>
+      <media:content url="images/c05f8ae1c6a794d43f1a83b579f882b1.jpg" type="image/heic"/>
+    <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>Twitter (X) hesabımız erişime engellendi!...</title>
+      <link>https://www.instagram.com/p/DdWmtypsIge/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdWmtypsIge/</guid>
+      <pubDate>Wed, 16 Sep 2026 15:26:46 +0000</pubDate>
+      <description>&lt;a href="https://www.instagram.com/p/DdWmtypsIge/" target="_blank"&gt;&lt;img src="images/d06544424aef7ddf04f713c92c75338f.jpg" alt="Twitter (X) hesabımız erişime engellendi!..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;Twitter (X) hesabımız erişime engellendi!&lt;br /&gt;
+&lt;br /&gt;
+M&amp;uuml;cadelemizi yasaklarla, sans&amp;uuml;rle bastıramayacaklar. Dayanışmayı, m&amp;uuml;cadeleyi b&amp;uuml;y&amp;uuml;tmek i&amp;ccedil;in yeni hesabımızı takip edebilirsiniz.&lt;br /&gt;
+&lt;br /&gt;
+Yeni hesabımız 👉🏻 @/kampuscadilari</description>
+      <media:content url="images/d06544424aef7ddf04f713c92c75338f.jpg" type="application/octet-stream"/>
+    <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ...</title>
+      <link>https://www.instagram.com/p/DdV2RDfkd5E/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdV2RDfkd5E/</guid>
+      <pubDate>Wed, 16 Sep 2026 08:23:22 +0000</pubDate>
+      <description>&lt;a href="images/0b7d1ab4a86ee702fa19b8d7e5030fd8.jpg" target="_blank"&gt;&lt;img src="images/0b7d1ab4a86ee702fa19b8d7e5030fd8.jpg" alt="#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/0ac977a45eb0ce8c95303b23e6a3f537.jpg" target="_blank"&gt;&lt;img src="images/0ac977a45eb0ce8c95303b23e6a3f537.jpg" alt="#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/8331b530832d31f67b9605d1debef19e.jpg" target="_blank"&gt;&lt;img src="images/8331b530832d31f67b9605d1debef19e.jpg" alt="#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/e750b71df831bb473b7a11e5c305ae59.jpg" target="_blank"&gt;&lt;img src="images/e750b71df831bb473b7a11e5c305ae59.jpg" alt="#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;a href="images/b11d7de6ecbdc52ded5dc341568c98a6.jpg" target="_blank"&gt;&lt;img src="images/b11d7de6ecbdc52ded5dc341568c98a6.jpg" alt="#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;#haberyorum #ailemg&amp;uuml;vendeoperasyonu #kadın #lgbti &lt;br /&gt;
+&lt;br /&gt;
+Aile G&amp;uuml;venliği Nefret Su&amp;ccedil;undan Mı Ge&amp;ccedil;iyor?&lt;br /&gt;
+&lt;br /&gt;
+İstanbul Cumhuriyet Başsavcılığının talimatıyla 12 Eyl&amp;uuml;l gecesi 15 ilde eş zamanlı &amp;ldquo;Ailem G&amp;uuml;vende&amp;rdquo; operasyonu d&amp;uuml;zenlendi. Operasyon kapsamında 162 kişi, 9 LGBTİ+ derneği ve 13 işletme hakkında adli işlem başlatıldı. İstanbul Cumhuriyet Başsavcılığının a&amp;ccedil;ıklamasına g&amp;ouml;re 20&amp;rsquo;ye yakın hak savunucusu ve LGBTİ+ aktivisti g&amp;ouml;zaltına alındı.&lt;br /&gt;
+&lt;br /&gt;
+Operasyonların ardından başta İstanbul, Ankara ve İzmir olmak &amp;uuml;zere bir&amp;ccedil;ok ilde ger&amp;ccedil;ekleştirilen protestolarda y&amp;uuml;zden fazla insan g&amp;ouml;zaltına alındı. &lt;br /&gt;
+&lt;br /&gt;
+Derinleşen yoksulluk ve beraberinde gelen toplumsal krizin i&amp;ccedil;erisinde faşizmin inşası AKP eliyle y&amp;uuml;kseltiliyor. İktidar ve iktidar yanlısı medya/kurumlar tarafından işsizliğin ve yozlaşmanın sebebi LGBTİ+&amp;rsquo;lar, g&amp;ouml;&amp;ccedil;menler, kadınlar ve azınlık halklar olarak g&amp;ouml;steriliyor. LGBTİ+&amp;rsquo;ları d&amp;uuml;şmanlaştıran belgeseller, reklamlar ve s&amp;ouml;ylemlerin giderek artması, hak arayışında bulunan LGBTİ+&amp;rsquo;ların maruz kaldığı polis şiddeti ve tutuklamalar bu durumu kanıtlar nitelikte oluyor.&lt;br /&gt;
+&lt;br /&gt;
+Yazının tamamına elyazmalari.com sitesinden ulaşabilirsiniz.</description>
+      <media:content url="images/0b7d1ab4a86ee702fa19b8d7e5030fd8.jpg" type="image/jpeg"/>
+      <media:content url="images/0ac977a45eb0ce8c95303b23e6a3f537.jpg" type="image/jpeg"/>
+      <media:content url="images/8331b530832d31f67b9605d1debef19e.jpg" type="image/jpeg"/>
+      <media:content url="images/e750b71df831bb473b7a11e5c305ae59.jpg" type="image/jpeg"/>
+      <media:content url="images/b11d7de6ecbdc52ded5dc341568c98a6.jpg" type="image/jpeg"/>
+    <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
+      <title>“Ailem Güvende” operasyonu kapsamında gözaltına alınan ve tutuklanan mücadele arkadaşlarımız için bugün...</title>
+      <link>https://www.instagram.com/p/DdUAP4sstb3/</link>
+      <guid isPermaLink="true">https://www.instagram.com/p/DdUAP4sstb3/</guid>
+      <pubDate>Tue, 15 Sep 2026 15:12:13 +0000</pubDate>
+      <description>&lt;a href="https://www.instagram.com/p/DdUAP4sstb3/" target="_blank"&gt;&lt;img src="images/800834563974f2bc8cd57392f323170d.jpg" alt="“Ailem Güvende” operasyonu kapsamında gözaltına alınan ve tutuklanan mücadele arkadaşlarımız için bugün..." /&gt;&lt;/a&gt;&lt;br&gt;&lt;br&gt;&amp;ldquo;Ailem G&amp;uuml;vende&amp;rdquo; operasyonu kapsamında g&amp;ouml;zaltına alınan ve tutuklanan m&amp;uuml;cadele arkadaşlarımız i&amp;ccedil;in bug&amp;uuml;n &amp;Ccedil;ağlayan Adliyesi &amp;ouml;n&amp;uuml;nde yapılan basın a&amp;ccedil;ıklamasında aralarında kızkardeşlerimizin de olduğu yaklaşık 80 kişi polis işkencesiyle g&amp;ouml;zaltına alındı. &lt;br /&gt;
+&lt;br /&gt;
+Baskılar, g&amp;ouml;zaltılar, operasyonlar ile bizleri sindiremezsiniz! Arkadaşlarımız derhal serbest bırakılsın!</description>
+      <media:content url="images/800834563974f2bc8cd57392f323170d.jpg" type="application/octet-stream"/>
     <sourceTitle>kampus.cadilari - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
       <title>▶ İSMİ BİLİNÇLİ KONULMUŞ AMA BU KAZA DEYİL CİNAYET OLASI KAST DEYİP AGIR CEZA YA TAŞINMADI BİZİM İÇİN...</title>
       <link>https://www.instagram.com/p/DdW-JSnx7R0/</link>
@@ -581,6 +525,7 @@ Boğazi&amp;ccedil;i İmar Şube M&amp;uuml;d&amp;uuml;rl&amp;uuml;ğ&amp;uuml; 
 &lt;br /&gt;
 👉Haberin tamamını www.elyazmalari.com adresinden okuyabilirsiniz</description>
       <media:content url="images/a3e95bfcc0578a90fbd55068aa088c8a.jpg" type="image/jpeg"/>
+      <media:content url="images/8891dc0b58c83ddb86af0ed488eda769.jpg" type="image/jpeg"/>
       <media:content url="images/31778877437f3c2fec6a6600bb2b1048.jpg" type="image/jpeg"/>
     <sourceTitle>elyazmalaricom - Instagram</sourceTitle></item><item xmlns:media="http://search.yahoo.com/mrss/">
       <title>#haberyorum #ailemgüvendeoperasyonu #kadın #lgbti ...</title>
