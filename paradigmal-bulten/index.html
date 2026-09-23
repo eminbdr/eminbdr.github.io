@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Bypasses Instagram CDN hotlink restrictions -->
+  <meta name="referrer" content="no-referrer">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f2f3f5">
+
+  <!-- iOS Specific PWA Tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-title" content="Paradigma">
+  <link rel="apple-touch-icon" href="icons/toplumsalozgurluk-192x192.png">
+  <title>TÖP Paradigma Bülteni</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <div class="header-bar">
+    <div class="header-left">
+      <h1>Latest News</h1>
+      <div class="update-timestamp" id="update-time">Loading...</div>
+    </div>
+    <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">Card View</button>
+  </div>
+
+  <div id="news-feed">Loading updates...</div>
+  
+  <script src="script.js"></script>
+  <script>
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+              .then(registration => {
+                console.log('ServiceWorker registered successfully with scope: ', registration.scope);
+              })
+              .catch(err => {
+                console.log('ServiceWorker registration failed: ', err);
+              });
+          });
+        }
+  </script>
+</body>
+
+</html>
