@@ -225,27 +225,63 @@ h1 {
   color: #bbb;
 }
 
+/* Wrapper to keep things organized */
+.filter-wrapper {
+  padding: 10px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* The new main toggle button */
+.filter-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #f0f0f0; /* Adjust to match your app's theme */
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-toggle-btn:hover {
+  background-color: #e0e0e0;
+}
+
+/* FILTER BAR BEHAVIOR
+
+/* The container for the individual source buttons */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 10px 5px;
+  margin-top: 10px;
 }
+
+/* Hide the filter bar when collapsed */
+.filter-bar.collapsed {
+  display: none;
+}
+
+/* Make sure your individual filter buttons look good */
 .filter-btn {
   padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
   border: none;
-  cursor: pointer;
+  border-radius: 15px;
   color: white;
-  font-weight: 600;
+  cursor: pointer;
+  font-size: 12px;
   opacity: 1;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s;
 }
+
 .filter-btn.inactive {
-  opacity: 0.3;
-  box-shadow: none;
+  opacity: 0.4;
 }
 
 /* Scroll View specific styles for mobile/vertical screens */

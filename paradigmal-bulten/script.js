@@ -1,7 +1,7 @@
 // Restore layout preference on load (defaults to List View)
 if (localStorage.getItem("preferred_view") === "card") {
   document.getElementById("news-feed").classList.add("card-view");
-  document.getElementById("view-toggle-btn").innerText = "List View";
+  document.getElementById("view-toggle-btn").innerText = "Liste Görünümü";
 }
 
 // Define available views
@@ -10,14 +10,15 @@ let currentViewIndex = 0;
 
 // Restore layout preference on load (defaults to List View)
 const savedView = localStorage.getItem("preferred_view") || "list";
-currentViewIndex = views.indexOf(savedView) !== -1 ? views.indexOf(savedView) : 0;
+currentViewIndex =
+  views.indexOf(savedView) !== -1 ? views.indexOf(savedView) : 0;
 applyView(views[currentViewIndex]);
 
 function toggleView() {
   // Cycle to the next view index
   currentViewIndex = (currentViewIndex + 1) % views.length;
   const newView = views[currentViewIndex];
-  
+
   applyView(newView);
   localStorage.setItem("preferred_view", newView);
 }
@@ -31,13 +32,13 @@ function applyView(viewMode) {
 
   if (viewMode === "card") {
     feed.classList.add("card-view");
-    btn.innerText = "Scroll View"; // Indicates next mode
+    btn.innerText = "Kaydırma Görünümü"; // Indicates next mode
   } else if (viewMode === "scroll") {
     feed.classList.add("scroll-view");
-    btn.innerText = "List View"; // Indicates next mode
+    btn.innerText = "Liste Görünümü"; // Indicates next mode
   } else {
     // List view is default (no extra class)
-    btn.innerText = "Card View"; // Indicates next mode
+    btn.innerText = "Kart Görünümü"; // Indicates next mode
   }
 }
 
@@ -101,10 +102,31 @@ fetch("sources.json", { cache: "no-store" })
           ),
         ];
 
-        // KAPSAM HATASI DÜZELTİLDİ: filterBar döngünün dışında oluşturulmalı
-        const filterBar = document.createElement("div");
-        filterBar.className = "filter-bar";
+        // Create a wrapper for the toggle button and the filter list
+        const filterWrapper = document.createElement("div");
+        filterWrapper.className = "filter-wrapper";
 
+        // Create the toggle button
+        const filterToggleBtn = document.createElement("button");
+        filterToggleBtn.className = "filter-toggle-btn";
+        filterToggleBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+          </svg>
+          Kaynakları Filtrele
+        `;
+
+        // Create the actual filter bar container
+        const filterBar = document.createElement("div");
+        filterBar.className = "filter-bar collapsed"; // Start hidden
+
+        // Toggle visibility on click
+        filterToggleBtn.onclick = () => {
+          filterBar.classList.toggle("collapsed");
+        };
+
+        filterWrapper.appendChild(filterToggleBtn);
+        filterWrapper.appendChild(filterBar);
         // Butonları ve renkleri oluştur
         uniqueSources.forEach((source) => {
           const displaySourceName = source
@@ -138,7 +160,7 @@ fetch("sources.json", { cache: "no-store" })
 
         // Filtre barını sayfaya ekle
         const feedContainer = document.getElementById("news-feed");
-        feedContainer.parentNode.insertBefore(filterBar, feedContainer);
+        feedContainer.parentNode.insertBefore(filterWrapper, feedContainer);
 
         // Feed HTML'ini oluştur
         let feedHtml = "";
@@ -234,37 +256,39 @@ function applyFilters() {
 
 // App Installation Button Logic
 let deferredPrompt;
-const installBtn = document.getElementById('installBtn');
+const installBtn = document.getElementById("installBtn");
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  // Save the event 
+window.addEventListener("beforeinstallprompt", (e) => {
+  // Save the event
   deferredPrompt = e;
-  installBtn.style.display = 'block';
+  installBtn.style.display = "block";
 });
 
-installBtn.addEventListener('click', async () => {
+installBtn.addEventListener("click", async () => {
   // SCENARIO 1: The prompt was already used and destroyed because they previously canceled.
   if (!deferredPrompt) {
-    alert("To install the app, please use the install icon in your address bar or the browser's menu.");
+    alert(
+      "To install the app, please use the install icon in your address bar or the browser's menu.",
+    );
     return;
   }
-  
+
   // SCENARIO 2: First time clicking the button
   try {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'dismissed') {
-      // The user clicked cancel. 
+
+    if (outcome === "dismissed") {
+      // The user clicked cancel.
       // The prompt is now dead, so we must nullify it.
       deferredPrompt = null;
-      
+
       // We purposefully DO NOT hide the install button here.
       // If they change their mind and click it again, it will trigger Scenario 1.
     } else {
       // The user installed the app.
       deferredPrompt = null;
-      installBtn.style.display = 'none';
+      installBtn.style.display = "none";
     }
   } catch (err) {
     // Failsafe if the browser default prompt was interacted with independently
@@ -273,18 +297,17 @@ installBtn.addEventListener('click', async () => {
   }
 });
 
-window.addEventListener('appinstalled', () => {
+window.addEventListener("appinstalled", () => {
   deferredPrompt = null;
-  installBtn.style.display = 'none';
-  console.log('PWA was installed successfully');
+  installBtn.style.display = "none";
+  console.log("PWA was installed successfully");
 });
-
 
 // version update
 let refreshing = false;
-navigator.serviceWorker.addEventListener('controllerchange', () => {
+navigator.serviceWorker.addEventListener("controllerchange", () => {
   if (!refreshing) {
     refreshing = true;
-    window.location.reload(); 
+    window.location.reload();
   }
 });
