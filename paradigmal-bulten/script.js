@@ -278,3 +278,13 @@ window.addEventListener('appinstalled', () => {
   installBtn.style.display = 'none';
   console.log('PWA was installed successfully');
 });
+
+
+// version update
+let refreshing = false;
+navigator.serviceWorker.addEventListener('controllerchange', () => {
+  if (!refreshing) {
+    refreshing = true;
+    window.location.reload(); 
+  }
+});
