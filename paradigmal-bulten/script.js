@@ -231,3 +231,50 @@ function applyFilters() {
     }
   });
 }
+
+// App Installation Button Logic
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Save the event 
+  deferredPrompt = e;
+  installBtn.style.display = 'block';
+});
+
+installBtn.addEventListener('click', async () => {
+  // SCENARIO 1: The prompt was already used and destroyed because they previously canceled.
+  if (!deferredPrompt) {
+    alert("To install the app, please use the install icon in your address bar or the browser's menu.");
+    return;
+  }
+  
+  // SCENARIO 2: First time clicking the button
+  try {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'dismissed') {
+      // The user clicked cancel. 
+      // The prompt is now dead, so we must nullify it.
+      deferredPrompt = null;
+      
+      // We purposefully DO NOT hide the install button here.
+      // If they change their mind and click it again, it will trigger Scenario 1.
+    } else {
+      // The user installed the app.
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    }
+  } catch (err) {
+    // Failsafe if the browser default prompt was interacted with independently
+    deferredPrompt = null;
+    alert("Please use your browser's menu to install the app.");
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  installBtn.style.display = 'none';
+  console.log('PWA was installed successfully');
+});
