@@ -9,6 +9,7 @@
     "elyazmalaricom": { "color": "#c12332", "icon": "icons/elyazmaları.avif" },
     "heryercocuk": { "color": "#fde801", "icon": "icons/heryercocuk.jpeg" },
     "mor_dayanisma": { "color": "#793472", "icon": "icons/mor_dayanisma.png" },
-    "ekmek_ve_onur": { "color": "#dd183b", "icon": "icons/ekmek_ve_onur.png" }
+    "ekmek_ve_onur": { "color": "#dd183b", "icon": "icons/ekmek_ve_onur.png" },
+    "liseliseruvencilerist": { "color": "#ea0000", "icon": "icons/liseliseruvencilerist.png" }
   }
 }
