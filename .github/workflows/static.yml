@@ -19,6 +19,10 @@ on:
       - 'paradigmal-bulten/feed.xml'
       - '.github/workflows/**'
       - 'paradigmal-bulten/process_images.py'
+  workflow_run:
+    workflows: ["Generate RSS Feed"]
+    types:
+      - completed
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
