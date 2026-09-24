@@ -1,4 +1,4 @@
-const CACHE_NAME = 'paradigma-cache-v4';
+const CACHE_NAME = 'paradigma-cache-v5';
 
 // Install event: cache the main UI shell and force immediate activation
 self.addEventListener('install', (event) => {
