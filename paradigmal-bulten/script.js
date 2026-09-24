@@ -55,7 +55,7 @@ fetch("sources.json", { cache: "no-store" })
     const sourceData = config.instagram || {};
 
     // 2. Metadata'yı çek
-    fetch(`feed_metadata.json?v=${Date.now()}`, { cache: "no-store" })
+    fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed_metadata.json`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : {}))
       .then((metadata) => {
         if (metadata.last_updated_readable) {
@@ -64,7 +64,7 @@ fetch("sources.json", { cache: "no-store" })
         }
 
         // 3. XML Feed'i çek
-        return fetch(`feed.xml?v=${Date.now()}`, { cache: "no-store" });
+        return fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed.xml`, { cache: "no-store" });
       })
       .then((response) => {
         if (!response.ok) throw new Error("feed.xml dosyası bulunamadı");
