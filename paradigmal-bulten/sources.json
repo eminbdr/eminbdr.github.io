@@ -4,7 +4,7 @@
     "motorlukuryeiscileri": { "color": "#1c1919", "icon": "icons/motorlukuryeiscileri.jpeg" },
     "toplumsal.ozgurluk.partisi": { "color": "#f9c835", "icon": "icons/toplumsalozgurlukpartisi.png" },
     "ozgurlukcugenclik": { "color": "#0e58a1", "icon": "icons/ozgurlukcugenclik.webp" },
-    "peri_hankoca": { "color": "#404040", "icon": "icons/default.png" },
+    "peri_hankoca": { "color": "#404040" },
     "doganincocuklari": { "color": "#991b1b", "icon": "icons/doganincocuklari.png" },
     "elyazmalaricom": { "color": "#c12332", "icon": "icons/elyazmaları.avif" },
     "heryercocuk": { "color": "#fde801", "icon": "icons/heryercocuk.jpeg" },
