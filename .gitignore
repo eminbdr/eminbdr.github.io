@@ -1,0 +1,14 @@
+# Local cache folders
+.raw_feeds/
+rss-bridge/
+__pycache__/
+*.pyc
+
+# Keep the images folder tracked, but ignore OS files
+.DS_Store
+Thumbs.db
+
+# Feed Update
+paradigmal-bulten/images
+paradigmal-bulten/feed_metadata.json
+paradigmal-bulten/feed.xml

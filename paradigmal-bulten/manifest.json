@@ -1,0 +1,21 @@
+{
+  "name": "TÖP Paradigma Bülteni",
+  "short_name": "Paradigma",
+  "description": "Güncel Paradigma Bülteni Haberleri",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f2f3f5",
+  "theme_color": "#f2f3f5",
+  "icons": [
+    {
+      "src": "icons/toplumsalozgurluk-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/toplumsalozgurluk-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
