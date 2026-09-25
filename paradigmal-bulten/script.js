@@ -268,7 +268,7 @@ installBtn.addEventListener("click", async () => {
   // SCENARIO 1: The prompt was already used and destroyed because they previously canceled.
   if (!deferredPrompt) {
     alert(
-      IOS cihazlarda uygulamayı kurmak için en alt ortada ki paylaş tuşuna bastıktan sonra, Ana Ekrana ekle butonuna basın",
+      "IOS cihazlarda uygulamayı kurmak için en alt ortada ki paylaş tuşuna bastıktan sonra, Ana Ekrana ekle butonuna basın",
     );
     return;
   }
