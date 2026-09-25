@@ -268,7 +268,7 @@ installBtn.addEventListener("click", async () => {
   // SCENARIO 1: The prompt was already used and destroyed because they previously canceled.
   if (!deferredPrompt) {
     alert(
-      "To install the app, please use the install icon in your address bar or the browser's menu.",
+      IOS cihazlarda uygulamayı kurmak için en alt ortada ki paylaş tuşuna bastıktan sonra, Ana Ekrana ekle butonuna basın",
     );
     return;
   }
