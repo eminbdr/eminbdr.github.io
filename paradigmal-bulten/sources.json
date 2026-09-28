@@ -11,7 +11,8 @@
     "mor_dayanisma": { "color": "#793472", "icon": "icons/mor_dayanisma.png" },
     "ekmek_ve_onur": { "color": "#dd183b", "icon": "icons/ekmek_ve_onur.png" },
     "liseliseruvencilerist": { "color": "#ea0000", "icon": "icons/liseliseruvencilerist.png" },
-    "tehisendikasi": { "color": "#bc0d34", "icon": "icons/tehisendikasi.png" }
+    "tehisendikasi": { "color": "#bc0d34", "icon": "icons/tehisendikasi.png" },
+    "seruvenistanbul": { "color": "#295da6", "icon": "icons/seruvenistanbul.png" }
 
   }
 }
