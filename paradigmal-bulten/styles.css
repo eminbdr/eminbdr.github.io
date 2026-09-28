@@ -1,3 +1,6 @@
+/* =========================================
+   BASE STYLES & TYPOGRAPHY
+========================================= */
 body {
   font-family:
     system-ui,
@@ -33,20 +36,7 @@ h1 {
   font-weight: normal;
 }
 
-.default-button{
-  background-color: #0366d6;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-toggle {
+.default-button, .btn-toggle {
   background-color: #0366d6;
   color: white;
   border: none;
@@ -63,7 +53,9 @@ h1 {
   background-color: #024ea4;
 }
 
-/* Base Layout: List View (Default) */
+/* =========================================
+   BASE LAYOUT: LIST VIEW (DEFAULT)
+========================================= */
 #news-feed {
   display: flex;
   flex-direction: column;
@@ -85,27 +77,6 @@ h1 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Floating Source Logo */
-.source-logo-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  border: 2px solid white;
-  z-index: 10;
-  background-color: #f2f3f5;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.source-logo-badge.loaded {
-  opacity: 1;
-}
-
 .card-img {
   width: 120px;
   height: 100%;
@@ -122,11 +93,11 @@ h1 {
 
 .article-overlay {
   position: relative;
-  padding: 10px 45px 10px 14px;
+  flex: 1; /* Takes up all remaining space between image and actions */
+  padding: 10px 0 10px 14px; 
   background: transparent;
   color: #222;
   height: auto;
-  width: 100%;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -162,7 +133,61 @@ h1 {
   color: #777;
 }
 
-/* Card / Grid View Overrides */
+/* =========================================
+   ARTICLE ACTIONS (RIGHT COLUMN: LOGO & SHARE)
+========================================= */
+.article-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes Logo to top, Share to bottom */
+  align-items: center;
+  padding: 6px;
+  height: stretch;
+  flex-shrink: 0; /* Prevents column from shrinking */
+  pointer-events: auto; /* Allows clicking the buttons */
+  box-sizing: border-box;
+}
+
+.source-logo-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border: 2px solid white;
+  background-color: #f2f3f5;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.source-logo-badge.loaded {
+  opacity: 1;
+}
+
+.share-btn {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  color: #333;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.share-btn:hover {
+  background-color: #ffffff;
+  color: #0366d6;
+  transform: scale(1.1);
+}
+
+/* =========================================
+   CARD / GRID VIEW OVERRIDES
+========================================= */
 #news-feed.card-view {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -188,25 +213,6 @@ h1 {
   min-height: auto;
 }
 
-#news-feed.card-view .article-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 50px 10px 10px 10px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.7) 60%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  color: white;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
 #news-feed.card-view .article-title {
   color: white;
   font-size: 13px;
@@ -225,7 +231,78 @@ h1 {
   color: #bbb;
 }
 
-/* Wrapper to keep things organized */
+/* Absolute position the action column for full-image card/scroll views */
+#news-feed.card-view .article-actions,
+#news-feed.scroll-view .article-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+/* Add padding so text doesn't hide behind the absolute right column */
+#news-feed.card-view .article-overlay,
+#news-feed.scroll-view .article-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  padding: 50px 45px 10px 10px; 
+}
+
+/* =========================================
+   SCROLL VIEW OVERRIDES
+========================================= */
+.scroll-view {
+  height: calc(100dvh - 120px); 
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  gap: 0; 
+}
+
+body:has(.scroll-view) {
+  overflow: hidden;
+}
+
+.scroll-view .article-card {
+  flex: 0 0 100%;
+  height: 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  margin: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  background-color: #222;
+}
+
+.scroll-view .card-img {
+  max-height: 60vh;
+  object-fit: cover;
+  width: 100%;
+}
+
+.scroll-view .article-title, .scroll-view .article-snippet, .scroll-view .article-meta {
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* =========================================
+   FILTER BAR & WRAPPER
+========================================= */
 .filter-wrapper {
   padding: 10px 5px;
   display: flex;
@@ -233,13 +310,12 @@ h1 {
   align-items: flex-start;
 }
 
-/* The new main toggle button */
 .filter-toggle-btn {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background-color: #f0f0f0; /* Adjust to match your app's theme */
+  background-color: #f0f0f0; 
   color: #333;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -253,9 +329,6 @@ h1 {
   background-color: #e0e0e0;
 }
 
-/* FILTER BAR BEHAVIOR
-
-/* The container for the individual source buttons */
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
@@ -263,12 +336,10 @@ h1 {
   margin-top: 10px;
 }
 
-/* Hide the filter bar when collapsed */
 .filter-bar.collapsed {
   display: none;
 }
 
-/* Make sure your individual filter buttons look good */
 .filter-btn {
   padding: 6px 12px;
   border: none;
@@ -284,40 +355,57 @@ h1 {
   opacity: 0.4;
 }
 
-/* Scroll View specific styles for mobile/vertical screens */
-.scroll-view {
-  /* Adjust the 120px offset based on the height of your header-bar and filter-bar */
-  height: calc(100dvh - 120px); 
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  margin: 0;
-  gap: 0; /* Remove gaps to prevent snapping to empty spaces */
+/* =========================================
+   DARK MODE STYLES
+========================================= */
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
-/* Restrict smooth scrolling on the parent feed to prevent double-scrolling issues */
-body:has(.scroll-view) {
-  overflow: hidden;
+body.dark-theme .update-timestamp {
+  color: #999;
 }
 
-.scroll-view .article-card {
-  flex: 0 0 100%;
-  height: 100%;
-  width: 100%;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  margin: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centers content vertically if the image is small */
+body.dark-theme .article-card {
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Ensures the image doesn't overflow the screen height in scroll view */
-.scroll-view .card-img {
-  max-height: 60vh;
-  object-fit: cover;
-  width: 100%;
+body.dark-theme .source-logo-badge {
+  border-color: #1e1e1e;
+  background-color: #121212;
+}
+
+body.dark-theme .article-title {
+  color: #ffffff;
+}
+
+body.dark-theme .article-snippet {
+  color: #aaaaaa;
+}
+
+body.dark-theme .article-meta {
+  color: #999;
+}
+
+body.dark-theme .filter-toggle-btn {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-theme .filter-toggle-btn:hover {
+  background-color: #3a3a3a;
+}
+
+body.dark-theme .share-btn {
+  background-color: rgba(40, 40, 40, 0.9);
+  color: #e0e0e0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .share-btn:hover {
+  background-color: #555;
+  color: #66b3ff;
 }

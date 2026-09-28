@@ -2,7 +2,55 @@
 if (localStorage.getItem("preferred_view") === "card") {
   document.getElementById("news-feed").classList.add("card-view");
   document.getElementById("view-toggle-btn").innerText = "Liste Görünümü";
+  
 }
+
+// Initialize Dark Mode from LocalStorage
+const savedTheme = localStorage.getItem('theme') || 'light';
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark-theme');
+}
+
+// Function to toggle Dark Mode
+function toggleTheme() {
+  document.body.classList.toggle('dark-theme');
+  const isDark = document.body.classList.contains('dark-theme');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  updateThemeIcon(isDark);
+}
+
+// Function to update the icon
+function updateThemeIcon(isDark) {
+  const themeBtn = document.getElementById('theme-toggle-btn');
+  if (themeBtn) {
+    themeBtn.innerText = isDark ? '☀️' : '🌙';
+  }
+}
+
+// Ensure icon is correct on initial page load
+document.addEventListener("DOMContentLoaded", () => {
+  updateThemeIcon(document.body.classList.contains('dark-theme'));
+});
+
+// Native Share Function
+window.shareArticle = function(event, btnElement) {
+  event.preventDefault(); // Prevents the <a> tag from opening the link
+  event.stopPropagation(); // Stops the click from bubbling up
+
+  const title = btnElement.getAttribute('data-title');
+  const url = btnElement.getAttribute('data-link');
+
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      url: url
+    }).catch((err) => console.log("Share failed or cancelled:", err));
+  } else {
+    // Fallback if browser doesn't support native sharing (e.g., older desktop browsers)
+    navigator.clipboard.writeText(url);
+    alert("Bağlantı kopyalandı! (Link copied!)");
+  }
+};
 
 // Define available views
 const views = ["list", "card", "scroll"];
@@ -254,10 +302,11 @@ fetch("sources.json", { cache: "no-store" })
           const iconUrl = sourceData[displaySourceName]?.icon || null;
           const cardColor = sourceColors[sourceName];
 
-          feedHtml += `
+feedHtml += `
           <a href="${link}" target="_blank" data-source="${sourceName}" class="article-card" style="border-left: 5px solid ${cardColor}">
-            ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : ""}
+            
             ${imageUrl ? `<img src="${imageUrl}" class="card-img" onload="this.classList.add('loaded')" onerror="this.style.display='none'" loading="lazy" />` : ""}
+            
             <div class="article-overlay">
               <div class="article-title">${title}</div>
               ${snippetText ? `<div class="article-snippet">${snippetText}</div>` : ""}
@@ -266,6 +315,22 @@ fetch("sources.json", { cache: "no-store" })
                 <span>${dateStr}</span>
               </div>
             </div>
+
+            <!-- The New Vertical Right Column -->
+            <div class="article-actions">
+              ${iconUrl ? `<img src="${iconUrl}" class="source-logo-badge" alt="${displaySourceName}" onload="this.classList.add('loaded')" onerror="this.style.display='none'" />` : `<div></div>`}
+              
+              <button class="share-btn" data-title="${title.replace(/"/g, '&quot;')}" data-link="${link}" onclick="shareArticle(event, this)" aria-label="Paylaş">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+              </button>
+            </div>
+
           </a>
         `;
         });
