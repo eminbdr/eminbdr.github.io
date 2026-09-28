@@ -55,7 +55,10 @@ fetch("sources.json", { cache: "no-store" })
     const sourceData = config.instagram || {};
 
     // 2. Metadata'yı çek
-    fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed_metadata.json`, { cache: "no-store" })
+    fetch(
+      `https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed_metadata.json`,
+      { cache: "no-store" },
+    )
       .then((res) => (res.ok ? res.json() : {}))
       .then((metadata) => {
         if (metadata.last_updated_readable) {
@@ -64,7 +67,10 @@ fetch("sources.json", { cache: "no-store" })
         }
 
         // 3. XML Feed'i çek
-        return fetch(`https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed.xml`, { cache: "no-store" });
+        return fetch(
+          `https://raw.githubusercontent.com/eminbdr/eminbdr.github.io/refs/heads/master/paradigmal-bulten/feed.xml`,
+          { cache: "no-store" },
+        );
       })
       .then((response) => {
         if (!response.ok) throw new Error("feed.xml dosyası bulunamadı");
@@ -92,7 +98,7 @@ fetch("sources.json", { cache: "no-store" })
           return dateB - dateA;
         });
 
-        // EKSİK OLAN SATIR EKLENDİ: Benzersiz kaynakları XML'den çek
+        // Benzersiz kaynakları XML'den çek
         const uniqueSources = [
           ...new Set(
             items.map(
@@ -103,64 +109,93 @@ fetch("sources.json", { cache: "no-store" })
         ];
 
         // Create a wrapper for the toggle button and the filter list
-        const filterWrapper = document.createElement("div");
-        filterWrapper.className = "filter-wrapper";
+        {
+          const filterWrapper = document.createElement("div");
+          filterWrapper.className = "filter-wrapper";
 
-        // Create the toggle button
-        const filterToggleBtn = document.createElement("button");
-        filterToggleBtn.className = "filter-toggle-btn";
-        filterToggleBtn.innerHTML = `
+          // Create the toggle button
+          const filterToggleBtn = document.createElement("button");
+          filterToggleBtn.className = "filter-toggle-btn";
+          filterToggleBtn.innerHTML = `
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
           </svg>
           Kaynakları Filtrele
         `;
 
-        // Create the actual filter bar container
-        const filterBar = document.createElement("div");
-        filterBar.className = "filter-bar collapsed"; // Start hidden
+          // Create the actual filter bar container
+          const filterBar = document.createElement("div");
+          filterBar.className = "filter-bar collapsed"; // Start hidden
 
-        // Toggle visibility on click
-        filterToggleBtn.onclick = () => {
-          filterBar.classList.toggle("collapsed");
-        };
+          // Toggle visibility on click
+          filterToggleBtn.onclick = () => {
+            filterBar.classList.toggle("collapsed");
+          };
 
-        filterWrapper.appendChild(filterToggleBtn);
-        filterWrapper.appendChild(filterBar);
-        // Butonları ve renkleri oluştur
-        uniqueSources.forEach((source) => {
-          const displaySourceName = source
-            .replace(" - Instagram", "")
-            .replace("@", "")
-            .trim();
+          filterWrapper.appendChild(filterToggleBtn);
+          filterWrapper.appendChild(filterBar);
 
-          // Rengi JSON'dan dinamik olarak al, yoksa varsayılan kullan
-          const color = sourceData[displaySourceName]?.color || "#555555";
-          sourceColors[source] = color;
-          activeFilters.add(source); // Başlangıçta hepsi seçili olsun
+          // EKLENEN KISIM: Tümünü Seç / Kaldır Butonu
+          const toggleAllBtn = document.createElement("button");
+          toggleAllBtn.className = "filter-btn toggle-all-btn";
+          toggleAllBtn.innerText = "Tümünü Seç / Kaldır";
+          toggleAllBtn.style.backgroundColor = "#333"; // Ayırt edici koyu bir renk
+          toggleAllBtn.style.color = "#fff";
+          toggleAllBtn.style.fontWeight = "bold";
 
-          const btn = document.createElement("button");
-          btn.className = "filter-btn";
-          btn.style.backgroundColor = color;
-          btn.innerText = displaySourceName;
-
-          // Toggle logic
-          btn.onclick = () => {
-            if (activeFilters.has(source)) {
-              activeFilters.delete(source);
-              btn.classList.add("inactive");
+          toggleAllBtn.onclick = () => {
+            // Sadece kaynak butonlarını seçiyoruz (Tümünü Seç butonunu hariç tutmak için)
+            const sourceBtns = filterBar.querySelectorAll(".filter-btn.source-btn");
+            
+            // Eğer hepsi seçiliyse, tümünü temizle. Değilse tümünü seç.
+            if (activeFilters.size === uniqueSources.length) {
+              activeFilters.clear();
+              sourceBtns.forEach((b) => b.classList.add("inactive"));
             } else {
-              activeFilters.add(source);
-              btn.classList.remove("inactive");
+              uniqueSources.forEach((s) => activeFilters.add(s));
+              sourceBtns.forEach((b) => b.classList.remove("inactive"));
             }
             applyFilters();
           };
-          filterBar.appendChild(btn);
-        });
+          filterBar.appendChild(toggleAllBtn);
+          // EKLENEN KISIM BİTİŞİ
 
-        // Filtre barını sayfaya ekle
-        const feedContainer = document.getElementById("news-feed");
-        feedContainer.parentNode.insertBefore(filterWrapper, feedContainer);
+          // Butonları ve renkleri oluştur
+          uniqueSources.forEach((source) => {
+            const displaySourceName = source
+              .replace(" - Instagram", "")
+              .replace("@", "")
+              .trim();
+
+            // Rengi JSON'dan dinamik olarak al, yoksa varsayılan kullan
+            const color = sourceData[displaySourceName]?.color || "#555555";
+            sourceColors[source] = color;
+            activeFilters.add(source); // Başlangıçta hepsi seçili olsun
+
+            const btn = document.createElement("button");
+            // source-btn class'ı, "Tümünü Seç" butonundan ayırmak için eklendi
+            btn.className = "filter-btn source-btn"; 
+            btn.style.backgroundColor = color;
+            btn.innerText = displaySourceName;
+
+            // Toggle logic
+            btn.onclick = () => {
+              if (activeFilters.has(source)) {
+                activeFilters.delete(source);
+                btn.classList.add("inactive");
+              } else {
+                activeFilters.add(source);
+                btn.classList.remove("inactive");
+              }
+              applyFilters();
+            };
+            filterBar.appendChild(btn);
+          });
+
+          // Filtre barını sayfaya ekle
+          const feedContainer = document.getElementById("news-feed");
+          feedContainer.parentNode.insertBefore(filterWrapper, feedContainer);
+        }
 
         // Feed HTML'ini oluştur
         let feedHtml = "";
