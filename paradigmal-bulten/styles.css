@@ -36,7 +36,7 @@ h1 {
   font-weight: normal;
 }
 
-.default-button, .btn-toggle {
+.btn-toggle, .btn-toggle {
   background-color: #0366d6;
   color: white;
   border: none;
@@ -45,6 +45,7 @@ h1 {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  margin: 4px;
   transition: background-color 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -27,6 +27,36 @@ function updateThemeIcon(isDark) {
   }
 }
 
+async function requestUpdate() {
+  // Parse the ISO 8601 date string for reliable cross-platform compatibility
+  const lastUpdated = new Date(window.lastUpdatedReadable);
+  const now = new Date();
+
+  // Calculate the time difference in milliseconds
+  const diffInMilliseconds = now - lastUpdated;
+  const oneHourInMilliseconds = 60 * 60 * 1000;
+
+  // Check if at least 1 hour has passed
+  if (diffInMilliseconds >= oneHourInMilliseconds) {
+    try {
+      const response = await fetch('https://ntfy.sh/request', {
+        method: 'POST',
+        body: 'Hi'
+      });
+
+      if (response.ok) {
+        console.log('Notification sent successfully.');
+      } else {
+        console.error(`Failed to send notification. Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error sending request to ntfy:', error);
+    }
+  } else {
+    console.log('Update is less than an hour old. No notification sent.');
+  }
+}
+
 // Ensure icon is correct on initial page load
 document.addEventListener("DOMContentLoaded", () => {
   updateThemeIcon(document.body.classList.contains('dark-theme'));
@@ -112,6 +142,7 @@ fetch("sources.json", { cache: "no-store" })
         if (metadata.last_updated_readable) {
           document.getElementById("update-time").textContent =
             `Last updated: ${metadata.last_updated_readable}`;
+            window.lastUpdatedReadable = metadata.last_updated_readable; // Store metadata globally for later use
         }
 
         // 3. XML Feed'i çek
