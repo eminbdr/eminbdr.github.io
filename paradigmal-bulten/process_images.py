@@ -346,7 +346,6 @@ combined_filenames = processed_filenames | all_processed_filenames
 turkey_tz = ZoneInfo('Europe/Istanbul')
 now_turkey = datetime.now(turkey_tz)
 
-metadata['last_updated'] = now_turkey.isoformat()
 metadata['last_updated_readable'] = now_turkey.strftime('%Y-%m-%d %H:%M:%S %Z')
 metadata['processed_image_filenames'] = sorted(list(combined_filenames))
 metadata['total_processed_count'] = len(combined_filenames)

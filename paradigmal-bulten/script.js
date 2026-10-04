@@ -28,32 +28,34 @@ function updateThemeIcon(isDark) {
 }
 
 async function requestUpdate() {
-  // Parse the ISO 8601 date string for reliable cross-platform compatibility
-  const lastUpdated = new Date(window.lastUpdatedReadable);
-  const now = new Date();
-
-  // Calculate the time difference in milliseconds
-  const diffInMilliseconds = now - lastUpdated;
+  const now = Date.now();
+  const lastRequestTime = localStorage.getItem('lastUpdateRequestTime');
   const oneHourInMilliseconds = 60 * 60 * 1000;
 
-  // Check if at least 1 hour has passed
-  if (diffInMilliseconds >= oneHourInMilliseconds) {
-    try {
-      const response = await fetch('https://ntfy.sh/request', {
-        method: 'POST',
-        body: 'Hi'
-      });
+  // Check if there is a previous request and if it was made less than 1 hour ago
+  if (lastRequestTime && (now - parseInt(lastRequestTime, 10)) < oneHourInMilliseconds) {
+    const remainingMinutes = Math.ceil((oneHourInMilliseconds - (now - parseInt(lastRequestTime, 10))) / 60000);
+    console.log(`Tekrar talep gönderebilmek için ${remainingMinutes} dakika bekleyin.`);
+    return; // Exit the function without sending a request
+  }
 
-      if (response.ok) {
-        console.log('Notification sent successfully.');
-      } else {
-        console.error(`Failed to send notification. Status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Error sending request to ntfy:', error);
+  try {
+    const response = await fetch('https://ntfy.sh/request', {
+      method: 'POST',
+      body: 'Hi'
+    });
+
+    if (response.ok) {
+      // Save the current timestamp to the user's browser storage
+      localStorage.setItem('lastUpdateRequestTime', now.toString());
+      
+      // Trigger the success alert
+      alert('Bülten Güncelleme İsteği Alınmıştır');
+    } else {
+      console.error(`Failed to send notification. Status: ${response.status}`);
     }
-  } else {
-    console.log('Update is less than an hour old. No notification sent.');
+  } catch (error) {
+    console.error('Error sending request to ntfy:', error);
   }
 }
 
@@ -399,32 +401,10 @@ installBtn.addEventListener("click", async () => {
   // SCENARIO 1: The prompt was already used and destroyed because they previously canceled.
   if (!deferredPrompt) {
     alert(
-      "IOS cihazlarda uygulamayı kurmak için en alt ortada ki paylaş tuşuna bastıktan sonra, Ana Ekrana ekle butonuna basın",
+      
+      "Android Cihazlarda uygulamayı kurmak için sağ üst köşedeki üç nokta menüsüne tıklayıp, aşağıdaki 'Uygulamayı Kur veya Kısayol Oluştur' seçeneğini seçin ve ardından uygulamayı kur butonuna basın. \n\n IOS cihazlarda uygulamayı kurmak için en alt ortada ki paylaş tuşuna bastıktan sonra, Ana Ekrana ekle butonuna basın"
     );
     return;
-  }
-
-  // SCENARIO 2: First time clicking the button
-  try {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-
-    if (outcome === "dismissed") {
-      // The user clicked cancel.
-      // The prompt is now dead, so we must nullify it.
-      deferredPrompt = null;
-
-      // We purposefully DO NOT hide the install button here.
-      // If they change their mind and click it again, it will trigger Scenario 1.
-    } else {
-      // The user installed the app.
-      deferredPrompt = null;
-      installBtn.style.display = "none";
-    }
-  } catch (err) {
-    // Failsafe if the browser default prompt was interacted with independently
-    deferredPrompt = null;
-    alert("Please use your browser's menu to install the app.");
   }
 });
 
