@@ -1,58 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-
+<!doctype html>
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bypasses Instagram CDN hotlink restrictions -->
-  <meta name="referrer" content="no-referrer">
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#f2f3f5">
-
-  <!-- iOS Specific PWA Tags -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-status-bar-style" content="default">
-  <meta name="mobile-web-app-title" content="Paradigma">
-  <link rel="apple-touch-icon" href="icons/toplumsalozgurluk-192x192.png">
-  <title>TÖP Paradigma Bülteni</title>
-  <link rel="stylesheet" href="styles.css">
-  <script data-goatcounter="https://zemin.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9cf34">
+<meta http-equiv="refresh" content="4;url=https://bulten-worker.muhammet5244.workers.dev/">
+<link rel="manifest" href="manifest.json">
+<link rel="canonical" href="https://bulten-worker.muhammet5244.workers.dev/">
+<title>Bülten taşındı · TÖP Paradigma Bülteni</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f9cf34;color:#1d1d1b;font:17px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center}
+  main{max-width:420px;padding:32px 24px}
+  h1{color:#e41d25;font-size:30px;line-height:1.05;margin:0 0 14px;letter-spacing:.3px;text-transform:uppercase}
+  a.btn{display:inline-block;margin-top:20px;background:#e41d25;color:#fff;text-decoration:none;padding:14px 26px;border-radius:28px;font-weight:700;letter-spacing:.5px}
+  p.small{font-size:14px;opacity:.75;margin-top:22px}
+</style>
 </head>
-
 <body>
-
-  <div class="header-bar">
-    <div class="header-left">
-      <h1>Paradigmal Bülten</h1>
-      <div class="update-timestamp" id="update-time">Loading...</div>
-    </div>
-    <div>
-    <button id="view-toggle-btn" class="btn-toggle" onclick="toggleView()">Kart Görünümü</button>
-    <button id="installBtn" class="btn-toggle">Uygulama Nasıl Kurulur</button>
-    <button id="requestUpdateBtn" class="btn-toggle" onclick="requestUpdate()">Bülteni Güncelleme Talebi Oluştur</button>
-    <button id="theme-toggle-btn" class="btn-toggle" onclick="toggleTheme()">🌙</button>
-
-    </div>
-  </div>
-
-  <div id="news-feed">Loading updates...</div>
-  
-  <script src="script.js"></script>
-  <script>
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-              .then(registration => {
-                console.log('ServiceWorker registered successfully with scope: ', registration.scope);
-              })
-              .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
-              });
-          });
-        }
-  </script>
+<main>
+  <h1>Bülten yeni<br>adresine taşındı</h1>
+  <p>TÖP Paradigma Bülteni artık <b>bulten-worker.muhammet5244.workers.dev</b> adresinde. Birkaç saniye içinde yönlendiriliyorsunuz.</p>
+  <a class="btn" href="https://bulten-worker.muhammet5244.workers.dev/">YENİ BÜLTENİ AÇ</a>
+  <p class="small">Uygulamayı ana ekranınıza eklediyseniz: yeni sayfada ☰ Menü → <b>Uygulamayı Kur</b> adımlarını izleyerek yenisini ekleyin, sonra bu eski simgeyi silebilirsiniz.</p>
+</main>
+<script>
+  // Remove the old offline copy so the installed app never shows stale pages.
+  (async () => {
+    try {
+      const regs = await navigator.serviceWorker?.getRegistrations?.() ?? [];
+      await Promise.all(regs.map((r) => r.unregister()));
+      const keys = await caches?.keys?.() ?? [];
+      await Promise.all(keys.map((k) => caches.delete(k)));
+    } catch (_) {}
+    setTimeout(() => location.replace('https://bulten-worker.muhammet5244.workers.dev/'), 2500);
+  })();
+</script>
 </body>
-
 </html>

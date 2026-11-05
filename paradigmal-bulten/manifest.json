@@ -1,21 +1,16 @@
 {
   "name": "TÖP Paradigma Bülteni",
   "short_name": "Paradigma",
-  "description": "Güncel Paradigma Bülteni Haberleri",
+  "version": "2.0.0",
+  "description": "Bülten yeni adresine taşındı: https://bulten-worker.muhammet5244.workers.dev/",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f2f3f5",
-  "theme_color": "#f2f3f5",
+  "background_color": "#f9cf34",
+  "theme_color": "#f9cf34",
   "icons": [
-    {
-      "src": "icons/toplumsalozgurluk-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/toplumsalozgurluk-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "https://bulten-worker.muhammet5244.workers.dev/icons/Icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "https://bulten-worker.muhammet5244.workers.dev/icons/Icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "https://bulten-worker.muhammet5244.workers.dev/icons/Icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

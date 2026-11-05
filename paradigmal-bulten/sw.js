@@ -1,60 +1,18 @@
-const CACHE_NAME = 'paradigma-cache-v8';
+// The old Bülten moved to https://bulten-worker.muhammet5244.workers.dev/.
+// This replaces the old caching service worker: on the next online start of
+// an installed app it deletes the offline copy, sends open windows to the new
+// address and unregisters itself. It handles no requests.
+const NEW_HOME = 'https://bulten-worker.muhammet5244.workers.dev/';
 
-// Install event: cache the main UI shell and force immediate activation
-self.addEventListener('install', (event) => {
-  self.skipWaiting();
-  
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        './',
-        './index.html',
-        './manifest.json'
-      ]);
-    })
-  );
-});
+self.addEventListener('install', () => self.skipWaiting());
 
-// Activate event: clean up old caches and take control
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          // Delete any cache that doesn't match the current CACHE_NAME
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      // Take control of all open pages immediately
-      return self.clients.claim();
-    })
-  );
-});
-
-// Fetch event: Network-first, fallback to cache
-self.addEventListener('fetch', (event) => {
-  // Completely ignore requests with unsupported schemes (like chrome-extension://)
-  if (!event.request.url.startsWith('http')) {
-    return;
-  }
-
-  event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        // If the network succeeds, save a copy of the fresh response to the cache
-        const responseClone = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
-        });
-        return networkResponse;
-      })
-      .catch(() => {
-        // If the network fails (offline), fall back to the cached version
-        return caches.match(event.request);
-      })
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+    await self.clients.claim();
+    const windows = await self.clients.matchAll({ type: 'window' });
+    await Promise.all(windows.map((w) => w.navigate(NEW_HOME).catch(() => {})));
+    await self.registration.unregister();
+  })());
 });
