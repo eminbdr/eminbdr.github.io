@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signing in…</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; display: grid;
+           place-items: center; min-height: 100vh; background: #0b0b0f; color: #eee; }
+    .card { text-align: center; padding: 24px; }
+    a { color: #c060ff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h3>Completing sign-in…</h3>
+    <p>Returning you to the app. If nothing happens,
+       <a id="manual" href="#">tap here</a>.</p>
+  </div>
+  <script>
+    // Forward the OAuth result (?code=... or ?error=...) into the app via its
+    // custom scheme. Instagram requires an https redirect, so this static page
+    // is the registered redirect URI and simply bounces back to the app.
+    (function () {
+      var tail = (window.location.search || '') + (window.location.hash || '');
+      var target = 'socialreader://auth' + tail;
+      document.getElementById('manual').href = target;
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>
